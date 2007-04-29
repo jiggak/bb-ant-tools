@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<project name="ant-rapc" default="build">
+	<property name="src.dir" location="src" />
+	<property name="etc.dir" location="etc" />
+	<property name="output.dir" location="classes" />
+	<property name="dist.dir" location="dist" />
+	
+	<path id="build.classpath">
+		<fileset dir="${ant.library.dir}" includes="*.jar" />
+	</path>
+	
+	<target name="compile">
+		<mkdir dir="${output.dir}" />
+		<javac srcdir="${src.dir}" destdir="${output.dir}"
+	          classpathref="build.classpath" />
+	</target>
+	
+	<target name="build" depends="compile">
+		<mkdir dir="${dist.dir}" />
+		<jar destfile="${dist.dir}/ant-rapc.jar">
+			<fileset dir="${output.dir}" />
+			<fileset dir="${etc.dir}" />
+		</jar>
+	</target>
+	
+	<target name="test" depends="build">
+		<typedef resource="ant-rapc-defs.xml" classpath="${dist.dir}/ant-rapc.jar" />
+		
+		<rapc type="cldc" srcdir="src">
+			<jdp title="Poo" />
+		</rapc>
+	</target>
+</project>
