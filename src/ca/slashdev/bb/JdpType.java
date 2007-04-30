@@ -1,7 +1,21 @@
-/**
- * Created Apr 29, 2007
- * By josh
- * Copyright 2005 Slashdev.ca
+/*
+ * Copyright 2007 Josh Kropf
+ * 
+ * This file is part of bb-ant-tools.
+ * 
+ * bb-ant-tools is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * bb-ant-tools is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with bb-ant-tools; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package ca.slashdev.bb;
 
@@ -15,7 +29,10 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.DataType;
 
 /**
- * 
+ * Collection of project settings.  The settings can be using the types
+ * attributes, or by specifying a properties file that contains the settings.
+ * The properties file must contains keys that match the attributes of this
+ * type exactly.
  * @author josh
  */
 public class JdpType extends DataType {
@@ -146,7 +163,7 @@ public class JdpType extends DataType {
    }
    
    /**
-    * Loads project attributes from a properties file
+    * Loads project attributes from a properties file.
     * @param file
     * @throws BuildException
     */
@@ -185,7 +202,12 @@ public class JdpType extends DataType {
       }
    }
    
-   
+   /**
+    * Generates a manifest file compatible with the rapc compiler.
+    * @param file
+    * @param output
+    * @throws BuildException
+    */
    public void writeManifest(File file, String output) throws BuildException {
       PrintStream out = null;
       
@@ -198,7 +220,11 @@ public class JdpType extends DataType {
          out.printf("MIDlet-Name: %s\n", output);
          out.printf("MIDlet-Version: %s\n", version);
          out.printf("MIDlet-Vendor: %s\n", vendor);
-         if (desc != null) out.printf("MIDlet-Description: %s\n", desc);
+         
+         if (desc != null) {
+            out.printf("MIDlet-Description: %s\n", desc);
+         }
+         
          out.printf("MIDlet-Jar-URL: %s.jar\n", output);
          out.println("MIDlet-Jar-Size: 0");
          out.println("MicroEdition-Profile: MIDP-2.0");

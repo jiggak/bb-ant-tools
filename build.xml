@@ -1,41 +1,36 @@
 <?xml version="1.0"?>
 <project name="bb-ant-tools" default="build">
-	<property name="src.dir" location="src" />
-	<property name="etc.dir" location="etc" />
-	<property name="output.dir" location="classes" />
-	<property name="dist.dir" location="dist" />
-	<property name="dist.jar" value="bb-ant-tools.jar" />
-	
-	<path id="build.classpath">
-		<fileset dir="${ant.library.dir}" includes="*.jar" />
-	</path>
-	
-	<target name="compile">
-		<mkdir dir="${output.dir}" />
-		<javac srcdir="${src.dir}" destdir="${output.dir}"
-	          classpathref="build.classpath" />
-	</target>
-	
-	<target name="build" depends="compile">
-		<mkdir dir="${dist.dir}" />
-		<jar destfile="${dist.dir}/${dist.jar}">
-			<fileset dir="${output.dir}" />
-			<fileset dir="${etc.dir}" />
-		</jar>
-	</target>
-	
-	<target name="clean">
-		<delete dir="${output.dir}" />
-	</target>
-	
-	<target name="test" depends="build">
-		<property name="jde.home" location="/home/josh/java/JDE4.1" />
-		<typedef resource="bb-ant-defs.xml" classpath="${dist.dir}/${dist.jar}" />
-		
-		<rapc output="ca_slashdev_poo" srcdir="src2" destdir="rapc">
-			<jdp type="cldc" />
-		</rapc>
-		
-		<sigtool codfile="rapc/ca_slashdev_poo.cod" />
-	</target>
+   <property name="src.dir" location="src" />
+   <property name="etc.dir" location="etc" />
+   <property name="output.dir" location="classes" />
+   <property name="build.dir" location="build" />
+   
+   <property name="build.ver" value="0.1" />
+   <property name="build.jar" value="bb-ant-tools-${build.ver}.jar" />
+
+   <path id="build.classpath">
+      <fileset dir="${ant.library.dir}" includes="*.jar" />
+   </path>
+
+   <target name="compile">
+      <mkdir dir="${output.dir}" />
+      <javac srcdir="${src.dir}" destdir="${output.dir}"
+             classpathref="build.classpath" />
+   </target>
+
+   <target name="build" depends="compile">
+      <mkdir dir="${build.dir}" />
+      <jar destfile="${build.dir}/${build.jar}">
+         <fileset dir="${output.dir}" />
+         <fileset dir="${etc.dir}" />
+      </jar>
+   </target>
+
+   <target name="clean">
+      <delete dir="${output.dir}" />
+   </target>
+   
+   <target name="distclean" depends="clean">
+      <delete dir="${build.dir}" />
+   </target>
 </project>
