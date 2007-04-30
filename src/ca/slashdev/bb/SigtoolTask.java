@@ -6,11 +6,11 @@
 package ca.slashdev.bb;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.Java;
 import org.apache.tools.ant.types.Path;
-import org.apache.tools.ant.types.resources.FileResource;
 import org.apache.tools.ant.util.FileUtils;
 
 /**
@@ -86,8 +86,7 @@ public class SigtoolTask extends BaseTask
          if (!FileUtils.getFileUtils().isUpToDate(codFile, touchFile)) {
             cods.add(new Path(getProject(), codFilePath));
             executeSigtool();
-            
-            new FileResource(touchFile).touch(System.currentTimeMillis());
+            touch(touchFile);
          } else {
             log("cod file already signed");
          }
@@ -113,5 +112,17 @@ public class SigtoolTask extends BaseTask
       }
       
       java.execute();
+   }
+   
+   private void touch(File file) {
+      try {
+         // create file if it doesn't already exist
+         if (!file.exists()) file.createNewFile();
+         
+         // update last modified time
+         file.setLastModified(System.currentTimeMillis());
+      } catch (IOException e) {
+         throw new BuildException("error touching file", e);
+      }
    }
 }

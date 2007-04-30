@@ -136,13 +136,14 @@ public class RapcTask extends BaseTask
    protected void executeRapc() {
       Java java = (Java)getProject().createTask("java");
       java.setTaskName(getTaskName());
+      java.setClassname("net.rim.tools.compiler.Compiler");
       
       // must fork in order to set working directory
       java.setFork(true);
       java.setDir(destDir);
       
-      // set rapc executable jar file
-      java.setJar(rapcJar);
+      // add rapc jar file to classpath
+      java.createClasspath().setLocation(rapcJar);
       
       if (quiet) java.createArg().setValue("-quiet");
       

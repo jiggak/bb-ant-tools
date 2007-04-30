@@ -29,11 +29,11 @@
 	</target>
 	
 	<target name="test" depends="build">
-		<property name="jde.home" location="/Users/josh/lib/JDE4.2" />
+		<property name="jde.home" location="/home/josh/java/JDE4.1" />
 		<typedef resource="bb-ant-defs.xml" classpath="${dist.dir}/${dist.jar}" />
 		
 		<rapc output="ca_slashdev_poo" srcdir="src2" destdir="rapc">
-			<jdp type="cldc" file="project.properties" />
+			<jdp type="cldc" />
 		</rapc>
 		
 		<sigtool codfile="rapc/ca_slashdev_poo.cod" />
