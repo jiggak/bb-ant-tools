@@ -3,7 +3,7 @@
  * By josh
  * Copyright 2005 Slashdev.ca
  */
-package ca.slashdev.rapc;
+package ca.slashdev.bb;
 
 import org.apache.tools.ant.types.EnumeratedAttribute;
 

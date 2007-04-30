@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<antlib>
+   <taskdef name="rapc" classname="ca.slashdev.bb.RapcTask" />
+   <taskdef name="sigtool" classname="ca.slashdev.bb.SigtoolTask" />
+   <typedef name="jdp" classname="ca.slashdev.bb.JdpType" />
+</antlib>

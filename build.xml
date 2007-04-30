@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
-<project name="ant-rapc" default="build">
+<project name="bb-ant-tools" default="build">
 	<property name="src.dir" location="src" />
 	<property name="etc.dir" location="etc" />
 	<property name="output.dir" location="classes" />
 	<property name="dist.dir" location="dist" />
+	<property name="dist.jar" value="bb-ant-tools.jar" />
 	
 	<path id="build.classpath">
 		<fileset dir="${ant.library.dir}" includes="*.jar" />
@@ -17,17 +18,24 @@
 	
 	<target name="build" depends="compile">
 		<mkdir dir="${dist.dir}" />
-		<jar destfile="${dist.dir}/ant-rapc.jar">
+		<jar destfile="${dist.dir}/${dist.jar}">
 			<fileset dir="${output.dir}" />
 			<fileset dir="${etc.dir}" />
 		</jar>
 	</target>
 	
+	<target name="clean">
+		<delete dir="${output.dir}" />
+	</target>
+	
 	<target name="test" depends="build">
-		<typedef resource="ant-rapc-defs.xml" classpath="${dist.dir}/ant-rapc.jar" />
+		<property name="jde.home" location="/Users/josh/lib/JDE4.2" />
+		<typedef resource="bb-ant-defs.xml" classpath="${dist.dir}/${dist.jar}" />
 		
-		<rapc type="cldc" srcdir="src">
-			<jdp title="Poo" />
+		<rapc output="ca_slashdev_poo" srcdir="src2" destdir="rapc">
+			<jdp type="cldc" file="project.properties" />
 		</rapc>
+		
+		<sigtool codfile="rapc/ca_slashdev_poo.cod" />
 	</target>
 </project>
