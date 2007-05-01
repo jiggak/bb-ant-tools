@@ -31,7 +31,7 @@
    </target>
 
    <target name="package" depends="build">
-      <zip destfile="${ant.project.name}-${build.ver}.zip" basedir="${build.dir}" />
+      <zip destfile="${package.zip.file}" basedir="${build.dir}" />
    </target>
 
    <target name="clean">
