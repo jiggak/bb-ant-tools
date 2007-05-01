@@ -6,7 +6,8 @@
    <property name="build.dir" location="build" />
    
    <property name="build.ver" value="0.1" />
-   <property name="build.jar" value="bb-ant-tools-${build.ver}.jar" />
+   <property name="build.jar.file" value="${ant.project.name}-${build.ver}.jar" />
+   <property name="package.zip.file" value="${ant.project.name}-${build.ver}.zip" />
 
    <path id="build.classpath">
       <fileset dir="${ant.library.dir}" includes="*.jar" />
@@ -20,16 +21,23 @@
 
    <target name="build" depends="compile">
       <mkdir dir="${build.dir}" />
-      <jar destfile="${build.dir}/${build.jar}">
+      <jar destfile="${build.dir}/${build.jar.file}">
          <fileset dir="${output.dir}" />
          <fileset dir="${etc.dir}" />
       </jar>
+      <copy todir="${build.dir}">
+         <fileset dir="${basedir}" includes="CHANGELOG,COPYING,README" />
+      </copy>
+   </target>
+
+   <target name="package" depends="build">
+      <zip destfile="${ant.project.name}-${build.ver}.zip" basedir="${build.dir}" />
    </target>
 
    <target name="clean">
       <delete dir="${output.dir}" />
    </target>
-   
+
    <target name="distclean" depends="clean">
       <delete dir="${build.dir}" />
    </target>
