@@ -40,7 +40,7 @@ Nested elements
 <src> - path-like structure of files (.java, .png, etc)
 <import> - path-like structure of import jars
 <jdp> - collection of project attributes
-   type - library,cldc,midlet defaults to library
+   type - library,cldc,midlet defaults to cldc
    title - project title
    vendor - company name
    version - project version
@@ -53,7 +53,7 @@ Nested elements
                  default value is 7, lower value = higher priority
    ribbonposition - position of icon in ribbon. 0 = default, higher
                     values move icon up priority
-   icon - ribbon icon
+   icon - ribbon icon (path relative to destdir, eg: ../img/ribbon1.png)
    file - properties file containing the project attributes
 
 Sigtool task:
