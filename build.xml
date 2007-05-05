@@ -6,8 +6,11 @@
    <property name="build.dir" location="build" />
    
    <property name="build.ver" value="0.1" />
-   <property name="build.jar.file" value="${ant.project.name}-${build.ver}.jar" />
-   <property name="package.zip.file" value="${ant.project.name}-${build.ver}.zip" />
+   <property name="build.name" value="${ant.project.name}" />
+
+   <property name="build.jar.file" value="${build.name}-${build.ver}.jar" />
+   <property name="binpkg.zip.file" value="${build.name}-${build.ver}-bin.zip" />
+   <property name="srcpkg.zip.file" value="${build.name}-${build.ver}-src.zip" />
 
    <path id="build.classpath">
       <fileset dir="${ant.library.dir}" includes="*.jar" />
@@ -25,13 +28,17 @@
          <fileset dir="${output.dir}" />
          <fileset dir="${etc.dir}" />
       </jar>
-      <copy todir="${build.dir}">
-         <fileset dir="${basedir}" includes="CHANGELOG,COPYING,README" />
-      </copy>
    </target>
 
-   <target name="package" depends="build">
-      <zip destfile="${package.zip.file}" basedir="${build.dir}" />
+   <target name="release" depends="build">
+      <zip destfile="${binpkg.zip.file}">
+         <fileset dir="${basedir}" includes="CHANGELOG,COPYING,README" />
+	 <fileset dir="${build.dir}" includes="${build.jar.file}" />
+      </zip>
+      <zip destfile="${srcpkg.zip.file}">
+         <fileset dir="${basedir}" includes="CHANGELOG,COPYING,README" />
+         <fileset dir="${basedir}" includes="src,etc,build.xml" />
+      </zip>
    </target>
 
    <target name="clean">
