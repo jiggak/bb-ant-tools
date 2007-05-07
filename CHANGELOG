@@ -1,6 +1,12 @@
 CHANGELOG blackberry ant tools
 ------------------------------
 
+2007/05/07 (josh)
+- Changed SigtoolTask to display a warning message if the cod file size was
+  the same before and after launching the SignatureTool
+- Fixed bug that would create "file signed" indicator regardless if the file
+  was signed or not
+
 2007/04/30 (josh)
 ----------
 - First release (0.1)

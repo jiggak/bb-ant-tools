@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Java;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.util.FileUtils;
@@ -123,10 +124,24 @@ public class SigtoolTask extends BaseTask
       if (codFile != null) {
          String codFilePath = codFile.getAbsolutePath();
          File touchFile = new File(codFilePath.replace(".cod", ".signed"));
-         if (!FileUtils.getFileUtils().isUpToDate(codFile, touchFile)) {
+         
+         long beforeSize = codFile.length();
+         
+         if (!FileUtils.getFileUtils().isUpToDate(codFile, touchFile, 0)) {
             cods.add(new Path(getProject(), codFilePath));
             executeSigtool();
-            touch(touchFile);
+            
+            long afterSize = codFile.length();
+            
+            if (beforeSize == afterSize) {
+               log("cod file does not appear to be modified", Project.MSG_WARN);
+            } else {
+               // sleep for one second before creating the touch file
+               try { Thread.sleep(1000); }
+               catch (InterruptedException e) { }
+               
+               touch(touchFile);
+            }
          } else {
             log("cod file already signed");
          }
