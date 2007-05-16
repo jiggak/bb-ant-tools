@@ -208,8 +208,11 @@ public class RapcTask extends BaseTask
       java.createArg().setValue("import="+imports.toString());
       java.createArg().setValue("codename="+output);
       
-      if (TypeAttribute.MIDLET.equals(jdp.getType().getValue())) {
+      String type = jdp.getType().getValue();
+      if (TypeAttribute.MIDLET.equals(type)) {
          java.createArg().setValue("-midlet");
+      } else if (TypeAttribute.LIBRARY.equals(type)) {
+         java.createArg().setValue("-library");
       }
       
       // manifest file is last parameter before file list

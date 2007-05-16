@@ -1,6 +1,11 @@
 CHANGELOG blackberry ant tools
 ------------------------------
 
+2007/05/16 (josh)
+- Fixed bug in RapcTask that would cause library type projects to
+  be compiled as CLDC applications
+- Second release (0.2)
+
 2007/05/07 (josh)
 - Changed SigtoolTask to display a warning message if the cod file size was
   the same before and after launching the SignatureTool
