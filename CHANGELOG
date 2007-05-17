@@ -1,6 +1,14 @@
 CHANGELOG blackberry ant tools
 ------------------------------
 
+2007/05/17 (josh)
+- RapcTask: added info message with number of files being compiled, and verbose
+  message when compilation is skipped
+- Added "install" target in build script that copies the jar file into the
+  ant lib directory
+- Removed build version from jar file name and added Version attribute to jar
+  manifest
+
 2007/05/16 (josh)
 - Fixed bug in RapcTask that would cause library type projects to
   be compiled as CLDC applications

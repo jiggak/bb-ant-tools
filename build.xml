@@ -5,10 +5,10 @@
    <property name="output.dir" location="classes" />
    <property name="build.dir" location="build" />
    
-   <property name="build.ver" value="0.2" />
+   <property name="build.ver" value="0.2a" />
    <property name="build.name" value="${ant.project.name}" />
 
-   <property name="build.jar.file" value="${build.name}-${build.ver}.jar" />
+   <property name="build.jar.file" value="${build.name}.jar" />
    <property name="binpkg.zip.file" value="${build.name}-${build.ver}-bin.zip" />
    <property name="srcpkg.zip.file" value="${build.name}-${build.ver}-src.zip" />
 
@@ -18,7 +18,7 @@
 
    <target name="compile">
       <mkdir dir="${output.dir}" />
-      <javac srcdir="${src.dir}" destdir="${output.dir}"
+      <javac srcdir="${src.dir}" destdir="${output.dir}" debug="true"
              classpathref="build.classpath" />
    </target>
 
@@ -27,7 +27,14 @@
       <jar destfile="${build.dir}/${build.jar.file}">
          <fileset dir="${output.dir}" />
          <fileset dir="${etc.dir}" />
+         <manifest>
+            <attribute name="Version" value="${build.ver}" />
+         </manifest>
       </jar>
+   </target>
+
+   <target name="install" depends="build">
+      <copy file="${build.dir}/${build.jar.file}" todir="${ant.library.dir}" />
    </target>
 
    <target name="release" depends="build">

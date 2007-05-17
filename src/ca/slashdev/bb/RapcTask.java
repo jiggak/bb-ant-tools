@@ -22,6 +22,7 @@ package ca.slashdev.bb;
 import java.io.File;
 
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Java;
 import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.Path;
@@ -185,9 +186,10 @@ public class RapcTask extends BaseTask
       jdp.writeManifest(new File(destDir, output+".rapc"), output);
       
       if (isOutOfDate(srcs, new File(destDir, output+".cod"))) {
+         log(String.format("Compiling %d source files to %s", srcs.size(), output+".cod"));
          executeRapc();
       } else {
-         log("cod file up to date");
+         log("Compilation skipped, cod is up to date", Project.MSG_VERBOSE);
       }
    }
    
