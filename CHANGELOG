@@ -1,6 +1,11 @@
 CHANGELOG blackberry ant tools
 ------------------------------
 
+2007/05/18 (josh)
+- Fixed library flag generation in JdpType class for sytem modules and
+  applications that run on startup
+- Third release (0.3)
+
 2007/05/17 (josh)
 - RapcTask: added info message with number of files being compiled, and verbose
   message when compilation is skipped

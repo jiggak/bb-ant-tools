@@ -187,10 +187,10 @@ public class JdpType extends DataType {
          desc = props.getProperty("desc");
          arguments = props.getProperty("arguments", "");
          midletClass = props.getProperty("midletclass", "");
-         systemModule = Boolean.parseBoolean(props.getProperty("systemModule", "false"));
-         runOnStartup = Boolean.parseBoolean(props.getProperty("runOnStartup", "false"));
+         systemModule = Boolean.parseBoolean(props.getProperty("systemmodule", "false"));
+         runOnStartup = Boolean.parseBoolean(props.getProperty("runonstartup", "false"));
          setStartupTier(Integer.parseInt(props.getProperty("startupTier", "7")));
-         setRibbonPosition(ribbonPosition = Integer.parseInt(props.getProperty("ribbonPosition", "0")));
+         setRibbonPosition(ribbonPosition = Integer.parseInt(props.getProperty("ribbonposition", "0")));
          icon = props.getProperty("icon", "");
       } catch (IOException e) {
          throw new BuildException("error loading properties", e);
@@ -235,19 +235,19 @@ public class JdpType extends DataType {
             out.printf("RIM-MIDlet-Position-1: %d\n", ribbonPosition);
             
             int flags = 0x00;
-            if (runOnStartup) flags &= 0xE1-(2*startupTier);
-            if (systemModule) flags &= 0x02;
+            if (runOnStartup) flags |= 0xE1-((2*startupTier)<<4);
+            if (systemModule) flags |= 0x02;
             out.printf("RIM-MIDlet-Flags-1: %d\n", flags);
          } else if (TypeAttribute.MIDLET.equals(type.getValue())) {
             out.printf("MIDlet-1: %s,%s,%s\n", title, icon, midletClass);
             out.printf("RIM-MIDlet-Position-1: %d\n", ribbonPosition);
             
             int flags = 0xE0;
-            if (systemModule) flags &= 0x02;
+            if (systemModule) flags |= 0x02;
             out.printf("RIM-MIDlet-Flags-1: %d\n", flags);
          } else {
             int flags = 0x02;
-            if (runOnStartup) flags &= 0xE1-(2*startupTier);
+            if (runOnStartup) flags |= 0xE1-((2*startupTier)<<4);
             out.printf("RIM-Library-Flags: %d\n", flags);
          }
       } catch (IOException e) {
