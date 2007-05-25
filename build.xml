@@ -40,11 +40,11 @@
    <target name="release" depends="build">
       <zip destfile="${binpkg.zip.file}">
          <fileset dir="${basedir}" includes="CHANGELOG,COPYING,README" />
-	 <fileset dir="${build.dir}" includes="${build.jar.file}" />
+         <fileset dir="${build.dir}" includes="${build.jar.file}" />
       </zip>
       <zip destfile="${srcpkg.zip.file}">
          <fileset dir="${basedir}" includes="CHANGELOG,COPYING,README" />
-         <fileset dir="${basedir}" includes="src,etc,build.xml" />
+         <fileset dir="${basedir}" includes="src/**/*.java,etc/**/*,build.xml"  />
       </zip>
    </target>
 
