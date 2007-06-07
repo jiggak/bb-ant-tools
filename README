@@ -29,6 +29,7 @@ Rapc task:
 ==========
 Attributes
 jdehome   - optional: jde home directory
+jdkhome   - optional: java virtual machine home directory
 srcdir    - directory of source files
 destdir   - optional: cod file output directory, defaults to build directory
 quiet     - optional: tells the rapc command to be less chatty, default to false

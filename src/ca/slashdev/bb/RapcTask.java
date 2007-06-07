@@ -33,6 +33,8 @@ import org.apache.tools.ant.types.Reference;
  */
 public class RapcTask extends BaseTask
 {
+   private File jdkHome;
+   
    private File rapcJar;
    
    private File destDir;
@@ -74,6 +76,21 @@ public class RapcTask extends BaseTask
       } else {
          throw new BuildException("jde home missing \"lib\" directory");
       }
+   }
+   
+   /**
+    * Sets the jdk (or jre) home directory of the jvm to use for launching
+    * the rapc command.  Set this property if the rim jde requires an older
+    * version of the jvm.
+    * @param jdkHome jdk home directory
+    */
+   public void setJdkHome(File jdkHome) {
+      File bin = new File(jdeHome, "bin");
+      if (!bin.isDirectory()) {
+         throw new BuildException("jdk home missing \"bin\" directory");
+      }
+      
+      this.jdkHome = jdkHome;
    }
    
    /**
@@ -198,8 +215,17 @@ public class RapcTask extends BaseTask
       java.setTaskName(getTaskName());
       java.setClassname("net.rim.tools.compiler.Compiler");
       
-      // must fork in order to set working directory
+      // must fork in order to set working directory and/or new environment
       java.setFork(true);
+      
+      // if jdk home was specified, set the jvm command
+      if (jdkHome != null) {
+         java.setJvm(String.format("%s%c%s",
+               new File(jdkHome, "bin").getAbsolutePath(),
+               File.separatorChar, "java"));
+      }
+      
+      // directory from which command will be launched
       java.setDir(destDir);
       
       // add rapc jar file to classpath

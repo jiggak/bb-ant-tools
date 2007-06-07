@@ -5,7 +5,7 @@
    <property name="output.dir" location="classes" />
    <property name="build.dir" location="build" />
    
-   <property name="build.ver" value="0.3" />
+   <property name="build.ver" value="0.4" />
    <property name="build.name" value="${ant.project.name}" />
 
    <property name="build.jar.file" value="${build.name}.jar" />
