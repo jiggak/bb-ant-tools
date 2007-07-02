@@ -23,16 +23,18 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.DataType;
 
 /**
- * Collection of project settings.  The settings can be using the types
- * attributes, or by specifying a properties file that contains the settings.
- * The properties file must contains keys that match the attributes of this
- * type exactly.
+ * Collection of project settings.  Project settings can be set using the
+ * data type attributes, or by specifying a properties file that contains the
+ * settings. The properties file must contains keys that match the attributes
+ * of this data type exactly.
  * @author josh
  */
 public class JdpType extends DataType {
@@ -48,6 +50,8 @@ public class JdpType extends DataType {
    private int startupTier;
    private int ribbonPosition;
    private String icon;
+   
+   private List<EntryPointType> entryPoints = new ArrayList<EntryPointType>();
    
    public JdpType() {
       type = new TypeAttribute();
@@ -162,6 +166,10 @@ public class JdpType extends DataType {
       this.icon = icon;
    }
    
+   public void addEntry(EntryPointType entry) {
+      entryPoints.add(entry);
+   }
+   
    /**
     * Loads project attributes from a properties file.
     * @param file
@@ -232,15 +240,46 @@ public class JdpType extends DataType {
          
          if (TypeAttribute.CLDC.equals(type.getValue())) {
             out.printf("MIDlet-1: %s,%s,%s\n", title, icon, arguments);
-            out.printf("RIM-MIDlet-Position-1: %d\n", ribbonPosition);
+            
+            if (ribbonPosition > 0) {
+               out.printf("RIM-MIDlet-Position-1: %d\n", ribbonPosition);
+            }
             
             int flags = 0x00;
             if (runOnStartup) flags |= 0xE1-((2*startupTier)<<4);
             if (systemModule) flags |= 0x02;
             out.printf("RIM-MIDlet-Flags-1: %d\n", flags);
+            
+            if (entryPoints.size() != 0) {
+               int i = 2;
+               for (EntryPointType entryPoint : entryPoints) {
+                  out.printf("MIDlet-%d: %s,%s,%s\n", i, entryPoint.getTitle(),
+                        entryPoint.getIcon(), entryPoint.getArguments());
+                  
+                  if (entryPoint.getRibbonPosition() > 0) {
+                     out.printf("RIM-MIDlet-Position-%d: %d\n", i, entryPoint.getRibbonPosition());
+                  }
+                  
+                  flags = 0x00;
+                  if (entryPoint.isRunOnStartup()) {
+                     flags |= 0xE1-((2*entryPoint.getStartupTier())<<4);
+                  }
+                  
+                  if (entryPoint.isSystemModule()) {
+                     flags |= 0x02;
+                  }
+                  
+                  out.printf("RIM-MIDlet-Flags-%d: %d\n", i, flags);
+                  
+                  i ++;
+               }
+            }
          } else if (TypeAttribute.MIDLET.equals(type.getValue())) {
             out.printf("MIDlet-1: %s,%s,%s\n", title, icon, midletClass);
-            out.printf("RIM-MIDlet-Position-1: %d\n", ribbonPosition);
+            
+            if (ribbonPosition > 0) {
+               out.printf("RIM-MIDlet-Position-1: %d\n", ribbonPosition);
+            }
             
             int flags = 0xE0;
             if (systemModule) flags |= 0x02;

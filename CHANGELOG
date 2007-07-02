@@ -1,6 +1,11 @@
 CHANGELOG blackberry ant tools
 ------------------------------
 
+2007/07/02 (josh)
+- Added nested type EntryPointType to JdpType for adding alternate entry
+  points to CLDC applications
+- Fifth release (0.5)
+
 2007/06/07 (josh)
 - Added optional property to RapcTask for changing the vm used to
   execute the rapc command

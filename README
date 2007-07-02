@@ -10,8 +10,8 @@ Prerequisites:
 Using:
 ------
 
-- Copy the bb-ant-tools-X.Y.jar into the your Ant lib directory, or just add
-  it to the classpath in your build script.
+- Copy the bb-ant-tools.jar into the your Ant lib directory, or just add it to
+  the classpath in your build script.
 - Add the <typedef> to your build script, eg:
   <typedef resource="bb-ant-defs.xml" classpathref="bb-ant-tools.classpath" />
 - Enjoy (see examples below)
@@ -29,7 +29,7 @@ Rapc task:
 ==========
 Attributes
 jdehome   - optional: jde home directory
-jdkhome   - optional: java virtual machine home directory
+jdkhome   - optional: alternate JVM home directory for launching rapc
 srcdir    - directory of source files
 destdir   - optional: cod file output directory, defaults to build directory
 quiet     - optional: tells the rapc command to be less chatty, default to false
@@ -42,7 +42,7 @@ Nested elements
 <import> - path-like structure of import jars
 <jdp> - collection of project attributes
    type - library,cldc,midlet defaults to cldc
-   title - project title
+   title - module title
    vendor - company name
    version - project version
    description - project description
@@ -56,6 +56,19 @@ Nested elements
                     values move icon up priority
    icon - ribbon icon (path relative to destdir, eg: ../img/ribbon1.png)
    file - properties file containing the project attributes
+   
+   <entry> - nested element of <jdp>
+             alternate entry point (currently for CLDC applications only)
+      title - entry point title (ribbon icon title for non-system modules)
+      arguments - arguments passed to main method
+      systemmodule - true if system module (run in background, no icon)
+      runonstartup - true if application should start when device starts
+      startuptier - startup priority in relation to other applications,
+                    default value is 7, lower value = higher priority
+      ribbonposition - position of icon in ribbon. 0 = default, higher
+                       values move icon up priority
+      icon - ribbon icon (path relative to destdir, eg: ../img/ribbon1.png)
+      file - properties file containing entry point attributes
 
 Sigtool task:
 =============

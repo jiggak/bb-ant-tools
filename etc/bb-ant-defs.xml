@@ -3,4 +3,5 @@
    <taskdef name="rapc" classname="ca.slashdev.bb.RapcTask" />
    <taskdef name="sigtool" classname="ca.slashdev.bb.SigtoolTask" />
    <typedef name="jdp" classname="ca.slashdev.bb.JdpType" />
+   <typedef name="entry" classname="ca.slashdev.bb.EntryPointType" />
 </antlib>
