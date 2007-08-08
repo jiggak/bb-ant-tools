@@ -1,6 +1,10 @@
 CHANGELOG blackberry ant tools
 ------------------------------
 
+2007/07/19 (josh)
+- Bug fix: set the failOnError property to true for the java process that
+  runs the rapc compiler
+
 2007/07/02 (josh)
 - Added nested type EntryPointType to JdpType for adding alternate entry
   points to CLDC applications

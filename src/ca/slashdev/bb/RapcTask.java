@@ -218,6 +218,9 @@ public class RapcTask extends BaseTask
       // must fork in order to set working directory and/or new environment
       java.setFork(true);
       
+      // we want to fail if rapc returns non-zero
+      java.setFailonerror(true);
+      
       // if jdk home was specified, set the jvm command
       if (jdkHome != null) {
          java.setJvm(String.format("%s%c%s",
