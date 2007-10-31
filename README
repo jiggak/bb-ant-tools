@@ -82,6 +82,8 @@ codfile    - optional: cod file to sign
 forceclose - optional: close regardless of its success, default false
 close      - optional: close after request if no errors occur, default true
 request    - optional: requests signatures when the tool launches, default true
+password   - optional: removes the interactive password prompt, this implicitly
+             sets "close" and "request" to true
 
 Nested elements
 <cod> - path-like structure of cod files

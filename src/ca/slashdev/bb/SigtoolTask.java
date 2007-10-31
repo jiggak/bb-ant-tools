@@ -41,6 +41,7 @@ public class SigtoolTask extends BaseTask
    private boolean forceClose = false;
    private boolean close = true;
    private boolean request = true;
+   private String password;
    
    private File codFile;
    private Path cods;
@@ -89,6 +90,16 @@ public class SigtoolTask extends BaseTask
     */
    public void setRequest(boolean request) {
       this.request = request;
+   }
+   
+   /**
+    * Sets password for automatic signature requesting.
+    * Setting the passowrd implicitly sets request and close
+    * properties to true.
+    * @param password
+    */
+   public void setPassword(String password) {
+      this.password = password;
    }
    
    /**
@@ -157,6 +168,13 @@ public class SigtoolTask extends BaseTask
       java.setFailonerror(true);
       java.setFork(true);
       java.setJar(sigtoolJar);
+      
+      if (password != null) {
+         close = true;
+         request = true;
+         java.createArg().setValue("-p");
+         java.createArg().setValue(password);
+      }
       
       if (forceClose) java.createArg().setValue("-C");
       if (close) java.createArg().setValue("-c");
