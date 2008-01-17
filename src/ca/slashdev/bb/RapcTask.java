@@ -20,10 +20,13 @@
 package ca.slashdev.bb;
 
 import java.io.File;
+import java.util.Vector;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
+import org.apache.tools.ant.taskdefs.Execute;
 import org.apache.tools.ant.taskdefs.Java;
+import org.apache.tools.ant.types.Environment;
 import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
@@ -210,6 +213,7 @@ public class RapcTask extends BaseTask
       }
    }
    
+   @SuppressWarnings("unchecked")
    protected void executeRapc() {
       Java java = (Java)getProject().createTask("java");
       java.setTaskName(getTaskName());
@@ -220,6 +224,33 @@ public class RapcTask extends BaseTask
       
       // we want to fail if rapc returns non-zero
       java.setFailonerror(true);
+      
+      Environment.Variable var = null;
+      
+      // loop through the systems environment variables looking for PATH
+      Vector<String> env = Execute.getProcEnvironment();
+      for (String line : env) {
+         
+         // setup our own path variable
+         if (line.toUpperCase().startsWith("PATH")) {
+            
+            // create new env variable using jde bin directory as the value
+            var = new Environment.Variable();
+            var.setKey("PATH");
+            var.setFile(new File(jdeHome, "bin"));
+            
+            // now add the systems current PATH value back into the new var
+            var.setValue(String.format("%s%c%s",
+                  line.substring(line.indexOf('=')+1),
+                  File.pathSeparatorChar,
+                  var.getValue()));
+            
+            break;
+         }
+      }
+      
+      if (var != null)
+         java.addEnv(var);
       
       // if jdk home was specified, set the jvm command
       if (jdkHome != null) {
