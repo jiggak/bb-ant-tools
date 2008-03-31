@@ -42,7 +42,7 @@ public class JdpType extends DataType {
    private String title;
    private String version;
    private String vendor;
-   private String desc;
+   private String description;
    private String arguments;
    private String midletClass;
    private boolean systemModule;
@@ -99,11 +99,11 @@ public class JdpType extends DataType {
    }
    
    public String getDesc() {
-      return desc;
+      return description;
    }
    
    public void setDesc(String desc) {
-      this.desc = desc;
+      this.description = desc;
    }
    
    public int getRibbonPosition() {
@@ -192,7 +192,7 @@ public class JdpType extends DataType {
          title = props.getProperty("title", "");
          version = props.getProperty("version", "0.0");
          vendor = props.getProperty("vendor", "<unknown>");
-         desc = props.getProperty("desc");
+         description = props.getProperty("description");
          arguments = props.getProperty("arguments", "");
          midletClass = props.getProperty("midletclass", "");
          systemModule = Boolean.parseBoolean(props.getProperty("systemmodule", "false"));
@@ -229,8 +229,8 @@ public class JdpType extends DataType {
          out.printf("MIDlet-Version: %s\n", version);
          out.printf("MIDlet-Vendor: %s\n", vendor);
          
-         if (desc != null) {
-            out.printf("MIDlet-Description: %s\n", desc);
+         if (description != null) {
+            out.printf("MIDlet-Description: %s\n", description);
          }
          
          out.printf("MIDlet-Jar-URL: %s.jar\n", output);
