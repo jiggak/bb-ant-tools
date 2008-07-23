@@ -46,6 +46,8 @@ public class RapcTask extends BaseTask
    
    private Path srcs;
    private Path imports;
+
+   private File exePath;
    
    private JdpType jdp = new JdpType();
    
@@ -94,6 +96,13 @@ public class RapcTask extends BaseTask
       }
       
       this.jdkHome = jdkHome;
+   }
+
+   /** 
+    * Sets the path for the preverify tool.
+    */
+   public void setexePath(File exePath) {
+      this.exePath = exePath;
    }
    
    /**
@@ -266,6 +275,9 @@ public class RapcTask extends BaseTask
       java.createClasspath().setLocation(rapcJar);
       
       if (quiet) java.createArg().setValue("-quiet");
+
+      if (exePath!=null)
+         java.createArg().setValue("-exepath="+exePath.getAbsolutePath());
       
       java.createArg().setValue("import="+imports.toString());
       

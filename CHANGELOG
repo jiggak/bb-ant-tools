@@ -1,6 +1,11 @@
 CHANGELOG blackberry ant tools
 ------------------------------
 
+2008/07/23 (josh)
+
+- Applied patch contributed by atleta to add property for explicitly setting
+  the search path for the preverify tool.
+
 2008/03/31 (josh)
 - Applied patch contributed by badgrs to rename the description property
   in JdpType from 'desc' to 'description'.

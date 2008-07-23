@@ -33,6 +33,7 @@ jdkhome   - optional: alternate JVM home directory for launching rapc
 srcdir    - directory of source files
 destdir   - optional: cod file output directory, defaults to build directory
 quiet     - optional: tells the rapc command to be less chatty, default to false
+exepath   - optional: tells rapc which directory contains preverify executable
 output    - required: name of output files eg: <output>.cod, <output>.cso
 import    - optional: path of jar files to import
 importref - optional: reference to imports path
