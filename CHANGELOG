@@ -1,6 +1,15 @@
 CHANGELOG blackberry ant tools
 ------------------------------
 
+2008-07-29 Josh Kropf <josh@slashdev.ca>
+
+    * RapcTask.java (setJdeHome): remove code for locating JDE specific jar
+      files to avoid causing conflicts when using project level jde.home
+      property and setting jdehome property in rapc task
+      (execute): add api jar to import path
+      (executeRapc): get rapc jar path as local variable
+
+
 2008/07/23 (josh)
 
 - Applied patch contributed by atleta to add property for explicitly setting

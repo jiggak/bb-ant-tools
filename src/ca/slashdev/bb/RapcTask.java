@@ -38,8 +38,6 @@ public class RapcTask extends BaseTask
 {
    private File jdkHome;
    
-   private File rapcJar;
-   
    private File destDir;
    private String output;
    private boolean quiet;
@@ -65,22 +63,6 @@ public class RapcTask extends BaseTask
    @Override
    public void setJdeHome(File jdeHome) {
       super.setJdeHome(jdeHome);
-      
-      File bin = new File(jdeHome, "bin");
-      if (bin.isDirectory()) {
-         rapcJar = new File(bin, "rapc.jar");
-      } else {
-         throw new BuildException("jde home missing \"bin\" directory");
-      }
-
-      File lib = new File(jdeHome, "lib");
-      if (lib.isDirectory()) {
-         Path apiPath = new Path(getProject());
-         apiPath.setLocation(new File(lib, "net_rim_api.jar"));
-         imports.add(apiPath);
-      } else {
-         throw new BuildException("jde home missing \"lib\" directory");
-      }
    }
    
    /**
@@ -101,7 +83,7 @@ public class RapcTask extends BaseTask
    /** 
     * Sets the path for the preverify tool.
     */
-   public void setexePath(File exePath) {
+   public void setExePath(File exePath) {
       this.exePath = exePath;
    }
    
@@ -195,6 +177,15 @@ public class RapcTask extends BaseTask
          throw new BuildException("jdehome not set");
       }
       
+      File lib = new File(jdeHome, "lib");
+      if (lib.isDirectory()) {
+         Path apiPath = new Path(getProject());
+         apiPath.setLocation(new File(lib, "net_rim_api.jar"));
+         imports.add(apiPath);
+      } else {
+         throw new BuildException("jde home missing \"lib\" directory");
+      }
+      
       if (output == null) {
          throw new BuildException("output is a required attribute");
       }
@@ -224,6 +215,14 @@ public class RapcTask extends BaseTask
    
    @SuppressWarnings("unchecked")
    protected void executeRapc() {
+      File rapcJar;
+      File bin = new File(jdeHome, "bin");
+      if (bin.isDirectory()) {
+         rapcJar = new File(bin, "rapc.jar");
+      } else {
+         throw new BuildException("jde home missing \"bin\" directory");
+      }
+      
       Java java = (Java)getProject().createTask("java");
       java.setTaskName(getTaskName());
       java.setClassname("net.rim.tools.compiler.Compiler");
@@ -276,7 +275,7 @@ public class RapcTask extends BaseTask
       
       if (quiet) java.createArg().setValue("-quiet");
 
-      if (exePath!=null)
+      if (exePath != null)
          java.createArg().setValue("-exepath="+exePath.getAbsolutePath());
       
       java.createArg().setValue("import="+imports.toString());
