@@ -1,5 +1,8 @@
-CHANGELOG blackberry ant tools
-------------------------------
+2008-07-30 Josh Kropf <josh@slashdev.ca>
+
+    * RapcTask.java
+      (verbose,nodebug,nowarn,warnerror,noconvert): new compiler flags
+
 
 2008-07-29 Josh Kropf <josh@slashdev.ca>
 

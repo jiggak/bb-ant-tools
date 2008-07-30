@@ -40,7 +40,13 @@ public class RapcTask extends BaseTask
    
    private File destDir;
    private String output;
-   private boolean quiet;
+   
+   private boolean quiet = true;
+   private boolean verbose;
+   private boolean nodebug;
+   private boolean nowarn;
+   private boolean warnerror;
+   private boolean noconvert;
    
    private Path srcs;
    private Path imports;
@@ -98,11 +104,54 @@ public class RapcTask extends BaseTask
    }
    
    /**
-    * Tells the rapc compiler to be less chatty, default is false.
+    * Tells the rapc compiler to be less chatty, default is true.
     * @param quiet
     */
    public void setQuiet(boolean quiet) {
       this.quiet = quiet;
+   }
+   
+   /**
+    * Turn on verbose output from rapc compiler, default is false.  The verbose
+    * flag overrides the quiet flag.
+    * @param verbose
+    */
+   public void setVerbose(boolean verbose) {
+      this.verbose = verbose;
+   }
+   
+   /**
+    * Disable generation of debug information, default is false.  Note: this
+    * causes rapc to skip creating the .debug file and has no effect on the
+    * final cod file.
+    * @param nodebug
+    */
+   public void setNodebug(boolean nodebug) {
+      this.nodebug = nodebug;
+   }
+   
+   /**
+    * Disable warning messages printed by rapc compiler, default is false.
+    * @param nowarn
+    */
+   public void setNowarn(boolean nowarn) {
+      this.nowarn = nowarn;
+   }
+   
+   /**
+    * Treat warnings as errors, default is false.
+    * @param warnerror
+    */
+   public void setWarnerror(boolean warnerror) {
+      this.warnerror = warnerror;
+   }
+   
+   /**
+    * Don't convert images to PNG, default is false.
+    * @param noconvert
+    */
+   public void setNoconvert(boolean noconvert) {
+      this.noconvert = noconvert;
    }
    
    /**
@@ -273,8 +322,14 @@ public class RapcTask extends BaseTask
       // add rapc jar file to classpath
       java.createClasspath().setLocation(rapcJar);
       
-      if (quiet) java.createArg().setValue("-quiet");
-
+      if (verbose) java.createArg().setValue("-verbose");
+      else if (quiet) java.createArg().setValue("-quiet");
+      
+      if (nodebug) java.createArg().setValue("-nodebug");
+      if (nowarn) java.createArg().setValue("-noWarn");
+      if (warnerror) java.createArg().setValue("-wx");
+      if (noconvert) java.createArg().setValue("-noconvertpng");
+      
       if (exePath != null)
          java.createArg().setValue("-exepath="+exePath.getAbsolutePath());
       
