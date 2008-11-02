@@ -36,6 +36,8 @@ exepath   - optional: tells rapc which directory contains preverify executable
 output    - required: name of output files eg: <output>.cod, <output>.cso
 import    - optional: path of jar files to import
 importref - optional: reference to imports path
+defines   - optional: delimited list of preprocessor defines, use platform
+                      specific path seperator (; = Windows, : = Unix)
 
 quiet     - optional: tells the rapc command to be less chatty, default is true
 verbose   - optional: turns on verbose output, default is false
@@ -45,6 +47,8 @@ warnerror - optional: treat all warnings as errors, default is false
 noconvert - optional: don't convert images to png, default is false
 
 Nested elements
+<define> - single nested preprocessor define
+   tag - tag name to define (eg: #ifdef THE_DEFINED_TAG)
 <src> - path-like structure of files (.java, .png, etc)
 <import> - path-like structure of import jars
 <jdp> - collection of project attributes
@@ -97,6 +101,28 @@ Nested elements
 
 
 
+Preprocessor:
+-------------
+
+Apparently since version 4.0, rapc compiler has had support for a simple set
+of preprocessor macros.  To use the preprocessor you must:
+
+ * enable processing on a per file basis by placing //#preprocess in the very
+   first line of each .java file
+ * use //#ifdef <TAG>, //#ifndef <TAG> to begin a block of text that will be
+   conditionally compiled if the TAG is defined or undefined respectively
+ * use //#else after //#ifdef <TAG> or //#ifndef <TAG>
+ * close conditional blocks with //#endif
+
+The rapc compiler command line expects a delimited list of TAG's defined.  The
+delimiter is the platform specific path separator, therefor when using 'defines'
+attribute of the <rapc> tag, be sure to use the correct separator (';' for
+Windows and ':' for Unix type operating systems) otherwise a build time error
+will occur.  Alternately you can specify preprocessor defines as nested elements
+to avoid specifying the separator character explicitly.
+
+
+
 Examples:
 ---------
 
@@ -121,11 +147,18 @@ Examples:
    <jdp title="Kick Ass App" vendor="Slashdev" version="1.0" type="cldc" />
    <src>
       <fileset dir="${src.dir}">
-         <includes name="**/*.java" />
-         <includes name="**/*.rrc" />
+         <include name="**/*.java" />
+         <includs name="**/*.rrc" />
       </fileset>
    </src>
    <import location="../libKickAss/ca_slashdev_libKickAss.jar" />
+</rapc>
+
+<!-- example 4 -->
+<!-- use the preprocessor -->
+<rapc output="ca_slashdev_MyKickAssApp" srcdir="${src.dir}" defines="TAG1;TAG2">
+   <define tag="TAG3"/>
+   <define tag="TAG4"/>
 </rapc>
 
 

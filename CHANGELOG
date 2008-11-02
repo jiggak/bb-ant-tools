@@ -1,3 +1,11 @@
+2008-11-01 Josh Kropf <josh@slashdev.ca>
+
+    * RapcTask.java: applied patch by Derek Konigsberg for preprocessor support
+      (RapcTask.Define): new nested element class
+      (execute): when defines attribute or nested <define> elements are set,
+      enable preprocessor
+
+
 2008-07-30 Josh Kropf <josh@slashdev.ca>
 
     * RapcTask.java

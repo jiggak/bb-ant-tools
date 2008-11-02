@@ -55,6 +55,29 @@ public class RapcTask extends BaseTask
    
    private JdpType jdp = new JdpType();
    
+   private String definesLine;
+   private Vector<Define> defines = new Vector<Define>();
+   
+   /**
+    * Represents a single preprocessor define.
+    */
+   public static class Define {
+      private String tag;
+      
+      public String getTag() {
+         return tag;
+      }
+      
+      public void setTag(String val) {
+         tag = val;
+      }
+      
+      @Override
+      public String toString() {
+         return tag;
+      }
+   }
+   
    @Override
    public void init() throws BuildException {
       srcs = new Path(getProject());
@@ -221,6 +244,23 @@ public class RapcTask extends BaseTask
       this.jdp = jdp;
    }
    
+   /**
+    * Sets delimiter separated list of preprocessor defines.  The delimiter
+    * is platform specific (semi-colon for Windows, colon for Unix).
+    * @param defines delimiter separated list of defines
+    */
+   public void setDefines(String defines) {
+      definesLine = defines;
+   }
+   
+   /**
+    * Add preprocessor define to collection of defines.
+    * @param def preprocessor define to add
+    */
+   public void addDefine(Define def) {
+      defines.add(def);
+   }
+   
    public void execute() throws BuildException {
       if (jdeHome == null) {
          throw new BuildException("jdehome not set");
@@ -332,6 +372,27 @@ public class RapcTask extends BaseTask
       
       if (exePath != null)
          java.createArg().setValue("-exepath="+exePath.getAbsolutePath());
+      
+      if (definesLine != null || defines.size() > 0) {
+         StringBuffer def = new StringBuffer("PREPROCESSOR");
+         
+         if (definesLine != null) {
+            def.append(File.pathSeparatorChar).append(definesLine);
+         }
+         
+         for (Define define : defines) {
+            def.append(File.pathSeparatorChar).append(define);
+         }
+         
+         String defs=def.toString();
+         if (File.pathSeparatorChar == ':' && defs.indexOf(';') != -1) {
+            throw new BuildException("defines must contain colon separator");
+         } else if (File.pathSeparatorChar == ';' && defs.indexOf(':') != -1 ) {
+            throw new BuildException("defines must contain semi-colon separator");
+         }
+         
+         java.createArg().setValue("-define="+defs);
+      }
       
       java.createArg().setValue("import="+imports.toString());
       
