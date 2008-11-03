@@ -430,10 +430,10 @@ public class RapcTask extends BaseTask
                      Project.MSG_WARN);
                defs = defs.replace(':', ';');
             }
-            
-            java.createArg().setValue("-define=PREPROCESSOR" +
-                  File.pathSeparatorChar + defs);
          }
+
+         java.createArg().setValue("-define=PREPROCESSOR" +
+               File.pathSeparatorChar + defs);
       }
       
       java.createArg().setValue("import="+imports.toString());

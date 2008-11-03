@@ -3,6 +3,8 @@
     * RapcTask.java
       (Define.if, Define.unless): added attributes to conditionally define
       preprocessor tags added as nested elements of rapc task
+      (execute): enable preprocessor when defines attribute or nested define
+      elements are set
 
 
 2008-11-01 Josh Kropf <josh@slashdev.ca>

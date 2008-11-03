@@ -4,6 +4,7 @@
    <property name="etc.dir" location="etc" />
    <property name="output.dir" location="classes" />
    <property name="build.dir" location="build" />
+   <property environment="env" />
    
    <property name="build.ver" value="0.9" />
    <property name="build.name" value="${ant.project.name}" />
@@ -34,7 +35,7 @@
    </target>
 
    <target name="install" depends="build">
-      <copy file="${build.dir}/${build.jar.file}" todir="${ant.library.dir}" />
+	   <copy file="${build.dir}/${build.jar.file}" todir="${env.HOME}/.ant/lib" />
    </target>
 
    <target name="release" depends="build">
