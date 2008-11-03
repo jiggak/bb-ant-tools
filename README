@@ -36,8 +36,7 @@ exepath   - optional: tells rapc which directory contains preverify executable
 output    - required: name of output files eg: <output>.cod, <output>.cso
 import    - optional: path of jar files to import
 importref - optional: reference to imports path
-defines   - optional: delimited list of preprocessor defines, use platform
-                      specific path seperator (; = Windows, : = Unix)
+defines   - optional: colon (or semi-colon) delimited list of preprocessor tags
 
 quiet     - optional: tells the rapc command to be less chatty, default is true
 verbose   - optional: turns on verbose output, default is false
@@ -47,8 +46,10 @@ warnerror - optional: treat all warnings as errors, default is false
 noconvert - optional: don't convert images to png, default is false
 
 Nested elements
-<define> - single nested preprocessor define
+<define> - define preprocessor tag using nested elements
    tag - tag name to define (eg: #ifdef THE_DEFINED_TAG)
+   if - define tag only when the named property is set
+   unless - define tag only when named property is not set
 <src> - path-like structure of files (.java, .png, etc)
 <import> - path-like structure of import jars
 <jdp> - collection of project attributes
@@ -107,6 +108,7 @@ Preprocessor:
 Apparently since version 4.0, rapc compiler has had support for a simple set
 of preprocessor macros.  To use the preprocessor you must:
 
+ * have version 4.x or higher of JDE
  * enable processing on a per file basis by placing //#preprocess in the very
    first line of each .java file
  * use //#ifdef <TAG>, //#ifndef <TAG> to begin a block of text that will be
@@ -114,12 +116,9 @@ of preprocessor macros.  To use the preprocessor you must:
  * use //#else after //#ifdef <TAG> or //#ifndef <TAG>
  * close conditional blocks with //#endif
 
-The rapc compiler command line expects a delimited list of TAG's defined.  The
-delimiter is the platform specific path separator, therefor when using 'defines'
-attribute of the <rapc> tag, be sure to use the correct separator (';' for
-Windows and ':' for Unix type operating systems) otherwise a build time error
-will occur.  Alternately you can specify preprocessor defines as nested elements
-to avoid specifying the separator character explicitly.
+Preprocessor defines can be specified as a colon or semi-colon delimited list
+as an attribute of the <rapc> tag OR zero or more nested <define> elements.
+See reference documentation for <rapc> task above.
 
 
 

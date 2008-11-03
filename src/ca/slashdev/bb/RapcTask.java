@@ -63,6 +63,8 @@ public class RapcTask extends BaseTask
     */
    public static class Define {
       private String tag;
+      private String ifCond;
+      private String unlessCond;
       
       public String getTag() {
          return tag;
@@ -72,9 +74,37 @@ public class RapcTask extends BaseTask
          tag = val;
       }
       
+      /**
+       * Sets the if attribute.  The define is evaluated when the property
+       * named by this attribute is defined in the project.
+       * @param ifCond
+       */
+      public void setIf(String ifCond) {
+         this.ifCond = ifCond;
+      }
+      
+      /**
+       * Sets the unless attribute.  The define is evaluated when the property
+       * named by this attribute is NOT defined in the project.
+       * @param unlessCond
+       */
+      public void setUnless(String unlessCond) {
+         this.unlessCond = unlessCond;
+      }
+      
       @Override
       public String toString() {
          return tag;
+      }
+      
+      public boolean valid(Project p) {
+         if (ifCond != null && p.getProperty(ifCond) == null) {
+            return false;
+         } else if (unlessCond != null && p.getProperty(unlessCond) != null) {
+            return false;
+         } else {
+            return true;
+         }
       }
    }
    
@@ -374,24 +404,36 @@ public class RapcTask extends BaseTask
          java.createArg().setValue("-exepath="+exePath.getAbsolutePath());
       
       if (definesLine != null || defines.size() > 0) {
-         StringBuffer def = new StringBuffer("PREPROCESSOR");
+         StringBuffer def = new StringBuffer();
          
          if (definesLine != null) {
             def.append(File.pathSeparatorChar).append(definesLine);
          }
          
          for (Define define : defines) {
-            def.append(File.pathSeparatorChar).append(define);
+            if (define.valid(getProject())) {
+               def.append(File.pathSeparatorChar).append(define);
+            }
          }
          
-         String defs=def.toString();
-         if (File.pathSeparatorChar == ':' && defs.indexOf(';') != -1) {
-            throw new BuildException("defines must contain colon separator");
-         } else if (File.pathSeparatorChar == ';' && defs.indexOf(':') != -1 ) {
-            throw new BuildException("defines must contain semi-colon separator");
+         String defs = def.toString();
+         if (defs.length() > 0) {
+            // defs contains Windows path separators on a Unix host
+            if (defs.indexOf(';') != -1 && File.pathSeparatorChar == ':') {
+               log("converting Windows style path separators to Unix style",
+                     Project.MSG_WARN);
+               defs = defs.replace(';', ':');
+               
+            // defs contains Unix path separators on a Windows host
+            } else if (defs.indexOf(':') != -1 && File.pathSeparatorChar == ';') {
+               log("converting Unix style path separators to Windows style",
+                     Project.MSG_WARN);
+               defs = defs.replace(':', ';');
+            }
+            
+            java.createArg().setValue("-define=PREPROCESSOR" +
+                  File.pathSeparatorChar + defs);
          }
-         
-         java.createArg().setValue("-define="+defs);
       }
       
       java.createArg().setValue("import="+imports.toString());
@@ -414,6 +456,7 @@ public class RapcTask extends BaseTask
          java.createArg().setFile(new File(file));
       }
       
+      log(java.getCommandLine().toString(), Project.MSG_DEBUG);
       java.execute();
    }
 }
