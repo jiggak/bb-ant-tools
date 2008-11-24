@@ -2,7 +2,7 @@ Prerequisites:
 --------------
 
 - RIM JDE (tested with 4.1 and up)
-- Apache Ant (1.6.x or higher)
+- Apache Ant (1.7.x or higher)
 - bb-ant-tools-X-Y.jar
 
 
