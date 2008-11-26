@@ -50,6 +50,8 @@ public class JdpType extends DataType {
    private int startupTier;
    private int ribbonPosition;
    private String icon;
+   private String nameResourceBundle;
+   private int nameResourceId;
    
    private List<EntryPointType> entryPoints = new ArrayList<EntryPointType>();
    
@@ -64,6 +66,7 @@ public class JdpType extends DataType {
       midletClass = "";
       startupTier = 7;
       ribbonPosition = 0;
+      nameResourceId = -1;
    }
    
    public TypeAttribute getType() {
@@ -165,7 +168,23 @@ public class JdpType extends DataType {
    public void setIcon(String icon) {
       this.icon = icon;
    }
-   
+
+   public String getNameResourceBundle() {
+      return nameResourceBundle;
+   }
+
+   public void setNameResourceBundle(String nameResourceBundle) {
+      this.nameResourceBundle = nameResourceBundle;
+   }
+
+   public int getNameResourceId() {
+      return nameResourceId;
+   }
+
+   public void setNameResourceId(int nameResourceId) {
+      this.nameResourceId= nameResourceId;
+   }
+
    public void addEntry(EntryPointType entry) {
       entryPoints.add(entry);
    }
@@ -200,6 +219,8 @@ public class JdpType extends DataType {
          setStartupTier(Integer.parseInt(props.getProperty("startupTier", "7")));
          setRibbonPosition(ribbonPosition = Integer.parseInt(props.getProperty("ribbonposition", "0")));
          icon = props.getProperty("icon", "");
+         nameResourceBundle = props.getProperty("nameresourcebundle");
+         nameResourceId = Integer.parseInt(props.getProperty("nameresourceid", "-1"));
       } catch (IOException e) {
          throw new BuildException("error loading properties", e);
       } finally {
@@ -244,6 +265,11 @@ public class JdpType extends DataType {
             if (ribbonPosition > 0) {
                out.printf("RIM-MIDlet-Position-1: %d\n", ribbonPosition);
             }
+
+            if (nameResourceBundle != null && nameResourceId > -1) {
+               out.printf("RIM-MIDlet-NameResourceBundle-1: %s\n", nameResourceBundle);
+               out.printf("RIM-MIDlet-NameResourceId-1: %d\n", nameResourceId);
+            }
             
             int flags = 0x00;
             if (runOnStartup) flags |= 0xE1-((2*startupTier)<<4);
@@ -259,7 +285,12 @@ public class JdpType extends DataType {
                   if (entryPoint.getRibbonPosition() > 0) {
                      out.printf("RIM-MIDlet-Position-%d: %d\n", i, entryPoint.getRibbonPosition());
                   }
-                  
+
+                  if (entryPoint.getNameResourceBundle() != null && entryPoint.getNameResourceId() > -1) {
+                     out.printf("RIM-MIDlet-NameResourceBundle-%d: %s\n", i, entryPoint.getNameResourceBundle());
+                     out.printf("RIM-MIDlet-NameResourceId-%d: %d\n", i, entryPoint.getNameResourceId());
+                  }
+
                   flags = 0x00;
                   if (entryPoint.isRunOnStartup()) {
                      flags |= 0xE1-((2*entryPoint.getStartupTier())<<4);

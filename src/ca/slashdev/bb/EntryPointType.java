@@ -43,6 +43,8 @@ public class EntryPointType extends DataType {
    private int startupTier;
    private int ribbonPosition;
    private String icon;
+   private String nameResourceBundle;
+   private int nameResourceId;
    
    public EntryPointType() {
       title = "";
@@ -50,6 +52,7 @@ public class EntryPointType extends DataType {
       arguments = "";
       startupTier = 7;
       ribbonPosition = 0;
+      nameResourceId = -1;
    }
    
    public String getTitle() {
@@ -107,6 +110,22 @@ public class EntryPointType extends DataType {
    public void setSystemModule(boolean systemModule) {
       this.systemModule = systemModule;
    }
+
+   public String getNameResourceBundle() {
+      return nameResourceBundle;
+   }
+
+   public void setNameResourceBundle(String nameResourceBundle) {
+      this.nameResourceBundle = nameResourceBundle;
+   }
+
+   public int getNameResourceId() {
+      return nameResourceId;
+   }
+
+   public void setNameResourceId(int nameResourceId) {
+      this.nameResourceId= nameResourceId;
+   }
    
    /**
     * Load entry point attributes from properties file.
@@ -133,6 +152,8 @@ public class EntryPointType extends DataType {
          setStartupTier(Integer.parseInt(props.getProperty("startupTier", "7")));
          setRibbonPosition(ribbonPosition = Integer.parseInt(props.getProperty("ribbonposition", "0")));
          icon = props.getProperty("icon", "");
+         nameResourceBundle = props.getProperty("nameresourcebundle");
+         nameResourceId = Integer.parseInt(props.getProperty("nameresourceid", "-1"));
       } catch (IOException e) {
          throw new BuildException("error loading properties", e);
       } finally {
