@@ -1,4 +1,4 @@
-2008-11-01 Josh Kropf <josh@slashdev.ca>
+2008-11-26 Josh Kropf <josh@slashdev.ca>
 
     * EntryPointType.java, JdpType.java: applied patch by jwall1701 to support
       using resource bundles for entry point titles
