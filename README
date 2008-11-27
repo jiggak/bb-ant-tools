@@ -66,6 +66,9 @@ Nested elements
                  default value is 7, lower value = higher priority
    ribbonposition - position of icon in ribbon. 0 = default, higher
                     values move icon up priority
+   nameresourcebundle - name of resource bundle that contains module title,
+                        eg: ca.slashdev.MyAppResources
+   nameresourceid - id of resource that contains module title, eg: 1234
    icon - ribbon icon (path relative to destdir, eg: ../img/ribbon1.png)
    file - properties file containing the project attributes
    
@@ -79,6 +82,9 @@ Nested elements
                     default value is 7, lower value = higher priority
       ribbonposition - position of icon in ribbon. 0 = default, higher
                        values move icon up priority
+      nameresourcebundle - name of resource bundle that contains entry point
+                           title, eg: ca.slashdev.MyAppResources
+      nameresourceid - id of resource that contains entry point title, eg: 1234
       icon - ribbon icon (path relative to destdir, eg: ../img/ribbon1.png)
       file - properties file containing entry point attributes
 
