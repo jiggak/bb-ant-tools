@@ -1,0 +1,18 @@
+  November 30, 2008
+============================================
+BB-Ant-Tools is poised to undergo some enhancements.  I am working on adding
+two more ant tasks:
+
+ * <alx> - generate .alx file, and corresponding directory structure
+ * <jadrewrite> - updates .jad file with new set of .cod files
+
+In addition, the rapc task will get support for selecting source files from
+a text file containing a list of source files.  This will make compiling
+large projects on the Windows platform possible as Windows has a limitation
+on the length of a command line, thus currently limiting the number of files
+that can be specified by the rapc task.
+
+The version numbering scheme has changed as well.  The next release will be
+marked 1.0.0 with following releases incrementing the minor version (1.x.0)
+for minor functionality changes, and the patch version (1.0.x) for bug fix
+releases.

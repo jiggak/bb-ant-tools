@@ -4,4 +4,7 @@
    <taskdef name="sigtool" classname="ca.slashdev.bb.SigtoolTask" />
    <typedef name="jdp" classname="ca.slashdev.bb.JdpType" />
    <typedef name="entry" classname="ca.slashdev.bb.EntryPointType" />
+   <taskdef name="alx" classname="ca.slashdev.bb.AlxTask" />
+   <typedef name="application" classname="ca.slashdev.bb.ApplicationType" />
+   <typedef name="codset" classname="ca.slashdev.bb.CodSetType" />
 </antlib>

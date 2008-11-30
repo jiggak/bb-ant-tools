@@ -22,6 +22,7 @@ package ca.slashdev.bb;
 import java.io.File;
 
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.util.FileUtils;
@@ -76,5 +77,12 @@ public abstract class BaseTask
       }
       
       return outOfDate;
+   }
+   
+   @Override
+   public void execute() throws BuildException {
+      String version = String.format("bb-ant-tools version %s",
+            getClass().getPackage().getImplementationVersion());
+      log(version, Project.MSG_DEBUG);
    }
 }

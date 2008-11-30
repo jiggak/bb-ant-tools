@@ -291,7 +291,10 @@ public class RapcTask extends BaseTask
       defines.add(def);
    }
    
+   @Override
    public void execute() throws BuildException {
+      super.execute();
+      
       if (jdeHome == null) {
          throw new BuildException("jdehome not set");
       }

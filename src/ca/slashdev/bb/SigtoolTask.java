@@ -120,6 +120,8 @@ public class SigtoolTask extends BaseTask
    
    @Override
    public void execute() throws BuildException {
+      super.execute();
+      
       if (jdeHome == null) {
          throw new BuildException("jdehome not set");
       }

@@ -1,3 +1,14 @@
+2008-11-30 Josh Kropf <josh@slashdev.ca>
+
+    * AlxTask.java: new class, the <alx> ant task
+    * ApplicationType.java: new class, subtype of <alx> ant task
+    * BaseTask.java (execute): print version number to build log
+    * CodSetType.java: new class, subtype of ApplicationType
+    * RapcTask.java (execute): call superclass execute method
+    * SigtoolTask.java (execute): call superclass execute method
+    * etc/bb-ant-defs.xml: added alx/application/codset definitions
+
+
 2008-11-26 Josh Kropf <josh@slashdev.ca>
 
     * EntryPointType.java, JdpType.java: applied patch by jwall1701 to support

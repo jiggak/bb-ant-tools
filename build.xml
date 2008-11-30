@@ -3,15 +3,10 @@
    <property name="src.dir" location="src" />
    <property name="etc.dir" location="etc" />
    <property name="output.dir" location="classes" />
-   <property name="build.dir" location="build" />
+   <property name="release.dir" location="release" />
    <property environment="env" />
    
-   <property name="build.ver" value="0.9" />
-   <property name="build.name" value="${ant.project.name}" />
-
-   <property name="build.jar.file" value="${build.name}.jar" />
-   <property name="binpkg.zip.file" value="${build.name}-${build.ver}-bin.zip" />
-   <property name="srcpkg.zip.file" value="${build.name}-${build.ver}-src.zip" />
+   <property file="build.properties" />
 
    <path id="build.classpath">
       <fileset dir="${ant.library.dir}" includes="*.jar" />
@@ -19,13 +14,12 @@
 
    <target name="compile">
       <mkdir dir="${output.dir}" />
-      <javac srcdir="${src.dir}" destdir="${output.dir}" debug="true"
+      <javac srcdir="${src.dir}" destdir="${output.dir}" debug="true" target="1.5"
              classpathref="build.classpath" />
    </target>
 
    <target name="build" depends="compile">
-      <mkdir dir="${build.dir}" />
-      <jar destfile="${build.dir}/${build.jar.file}">
+      <jar destfile="${build.jar.file}">
          <fileset dir="${output.dir}" />
          <fileset dir="${etc.dir}" />
          <manifest>
@@ -35,25 +29,48 @@
    </target>
 
    <target name="install" depends="build">
-	   <copy file="${build.dir}/${build.jar.file}" todir="${env.HOME}/.ant/lib" />
+      <copy file="${build.jar.file}" todir="${env.HOME}/.ant/lib" />
    </target>
 
    <target name="release" depends="build">
+      <mkdir dir="${release.dir}" />
+      
+      <copy todir="${release.dir}" >
+         <fileset dir="${basedir}" includes="README" />
+         <filterset>
+            <filter token="VERSION" value="${build.ver}"/>
+         </filterset>
+      </copy>
+   	
+   	<copy todir="${release.dir}">
+   		<fileset dir="${basedir}" includes="CHANGELOG,COPYING,NEWS" />
+   		<fileset dir="${basedir}" includes="src/**/*.java,etc/*,build.*">
+   			<include name="src/**/*.java" />
+   			<include name="etc/**/*" />
+   			<include name="build.*" />
+   		</fileset>
+   	</copy>
+   	
+   	<copy file="${build.jar.file}" todir="${release.dir}" />
+   	
       <zip destfile="${binpkg.zip.file}">
-         <fileset dir="${basedir}" includes="CHANGELOG,COPYING,README" />
-         <fileset dir="${build.dir}" includes="${build.jar.file}" />
+         <fileset dir="${release.dir}"
+         	      includes="CHANGELOG,COPYING,README,NEWS,${build.jar.file}" />
       </zip>
       <zip destfile="${srcpkg.zip.file}">
-         <fileset dir="${basedir}" includes="CHANGELOG,COPYING,README" />
-         <fileset dir="${basedir}" includes="src/**/*.java,etc/**/*,build.xml"  />
+         <fileset dir="${release.dir}"
+         	      includes="CHANGELOG,COPYING,README,NEWS,src/**/*,etc/*,build.*" />
       </zip>
    </target>
 
    <target name="clean">
       <delete dir="${output.dir}" />
+   	<delete dir="${release.dir}" />
+   	<delete dir="${build.jar.file}" />
    </target>
 
    <target name="distclean" depends="clean">
-      <delete dir="${build.dir}" />
+      <delete file="${srcpkg.zip.file}" />
+   	<delete file="${binpkg.zip.file}" />
    </target>
 </project>
