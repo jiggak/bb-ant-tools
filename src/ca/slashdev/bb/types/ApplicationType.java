@@ -17,7 +17,7 @@
  * along with bb-ant-tools; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package ca.slashdev.bb;
+package ca.slashdev.bb.types;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,6 +34,8 @@ import org.apache.tools.ant.types.resources.FileResource;
 import org.apache.tools.ant.util.ResourceUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import ca.slashdev.bb.util.Utils;
 
 /**
  * @author josh
@@ -199,7 +201,7 @@ public class ApplicationType extends DataType {
          for (ResourceCollection collection : codSet.getResources()) {
             Iterator<Resource> i = collection.iterator();
             while (i.hasNext()) {
-               files.append('\n').append(i.next().getName());
+               files.append('\n').append(Utils.getFilePart(i.next()));
             }
             files.append('\n');
          }
@@ -213,7 +215,6 @@ public class ApplicationType extends DataType {
    
    public void copyCodFiles(File destDir) throws IOException {
       Resource r;
-      String fileName;
       
       for (CodSetType codSet : codSets) {
          if (codSet.getDir() != null) {
@@ -227,12 +228,8 @@ public class ApplicationType extends DataType {
             Iterator<Resource> i = rc.iterator();
             while (i.hasNext()) {
                r = i.next();
-               fileName = r.getName();
-               
-               if (fileName.indexOf('/') != -1)
-                  fileName = fileName.substring(fileName.lastIndexOf('/')+1);
-               
-               ResourceUtils.copyResource(r, new FileResource(destDir, fileName));
+               ResourceUtils.copyResource(r,
+                     new FileResource(destDir, Utils.getFilePart(r)));
             }
          }
       }

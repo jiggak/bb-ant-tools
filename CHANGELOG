@@ -1,3 +1,11 @@
+2008-12-01 Josh Kropf <josh@slashdev.ca>
+
+    * ApplicationType.java (generate): use just file name instead of relative
+      path for cod files in .alx file
+    * Utils.java: new class, static methods for working with File/Resource
+    * JadtoolTask.java: new class, the <jadtool> ant task
+
+
 2008-11-30 Josh Kropf <josh@slashdev.ca>
 
     * AlxTask.java: new class, the <alx> ant task

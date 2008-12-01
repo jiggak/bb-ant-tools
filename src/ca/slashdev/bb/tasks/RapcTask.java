@@ -17,9 +17,10 @@
  * along with bb-ant-tools; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package ca.slashdev.bb;
+package ca.slashdev.bb.tasks;
 
 import java.io.File;
+import java.io.PrintStream;
 import java.util.Vector;
 
 import org.apache.tools.ant.BuildException;
@@ -30,6 +31,10 @@ import org.apache.tools.ant.types.Environment;
 import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
+import org.apache.tools.ant.util.FileUtils;
+
+import ca.slashdev.bb.types.JdpType;
+import ca.slashdev.bb.types.TypeAttribute;
 
 /**
  * @author josh
@@ -47,6 +52,9 @@ public class RapcTask extends BaseTask
    private boolean nowarn;
    private boolean warnerror;
    private boolean noconvert;
+   
+   private boolean generateSourceList = false;
+   private String sourceListFile = "sources.txt";
    
    private Path srcs;
    private Path imports;
@@ -205,6 +213,28 @@ public class RapcTask extends BaseTask
     */
    public void setNoconvert(boolean noconvert) {
       this.noconvert = noconvert;
+   }
+   
+   /**
+    * Generate file containing list of source files.  The file will contain
+    * full path names of each source file separated by newline characters.
+    * The result is passed to the rapc compiler to work around the command
+    * line length limitation in Windows.  This flag is set to false by default.
+    * @param generateSourceList true to generate source list
+    * @see RapcTask#setSourceListFile(String)
+    */
+   public void setGenerateSourceList(boolean generateSourceList) {
+      this.generateSourceList = generateSourceList;
+   }
+   
+   /**
+    * Sets name of source list file.  This file will be created in the
+    * destination directory.  The default value is <code>sources.txt</code>.
+    * @param sourceListFile source list file name
+    * @see RapcTask#
+    */
+   public void setSourceListFile(String sourceListFile) {
+      this.sourceListFile = sourceListFile;
    }
    
    /**
@@ -454,9 +484,28 @@ public class RapcTask extends BaseTask
       // manifest file is last parameter before file list
       java.createArg().setValue(output+".rapc");
       
-      // add each of the items in the srcs path as file args
-      for (String file : srcs.list()) {
-         java.createArg().setFile(new File(file));
+      // when true, generate text file containing list of source files
+      if (generateSourceList) {
+         PrintStream output = null;
+         try {
+            output = new PrintStream(new File(destDir, sourceListFile));
+            for (String file : srcs.list()) {
+               // full path of each file, followed by newline character
+               output.println(file);
+            }
+            
+            // rapc command expects parameter to begin with '@'
+            java.createArg().setValue("@" + sourceListFile);
+         } catch (Exception e) {
+            throw new BuildException("error creating source list file", e);
+         } finally {
+            FileUtils.close(output);
+         }
+      } else {
+         // add each of the items in the srcs path as file args
+         for (String file : srcs.list()) {
+            java.createArg().setFile(new File(file));
+         }
       }
       
       log(java.getCommandLine().toString(), Project.MSG_DEBUG);

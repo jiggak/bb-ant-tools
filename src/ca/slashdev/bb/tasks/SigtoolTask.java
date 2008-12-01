@@ -17,15 +17,17 @@
  * along with bb-ant-tools; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package ca.slashdev.bb;
+package ca.slashdev.bb.tasks;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Vector;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Java;
 import org.apache.tools.ant.types.Path;
+import org.apache.tools.ant.types.ResourceCollection;
 import org.apache.tools.ant.util.FileUtils;
 
 /**
@@ -44,6 +46,7 @@ public class SigtoolTask extends BaseTask
    private String password;
    
    private File codFile;
+   private Vector<ResourceCollection> codFiles = new Vector<ResourceCollection>();
    private Path cods;
    
    @Override
@@ -116,6 +119,10 @@ public class SigtoolTask extends BaseTask
     */
    public void addCod(Path codPath) {
       cods.add(codPath);
+   }
+   
+   public void add(ResourceCollection rc) {
+      codFiles.add(rc);
    }
    
    @Override
