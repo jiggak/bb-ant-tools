@@ -1,5 +1,17 @@
 2008-12-01 Josh Kropf <josh@slashdev.ca>
 
+    * AlxTask.java (executeAlx): omit xml declaration form generated .alx
+    * BaseTask.java (isOutOfDate): removed method
+    * SigtoolTask.java (addCod): removed method, no more <cod> child element
+      (add): added method, accepts any resource collection type element
+    * ApplicationType.java (generate, copyCodFiles): removed nested loops
+      due to use of Union class in CodSetType
+    * CodSetType.java (resources): use Union instead Vector<ResourceCollection>
+    * Utils.java (isUpToDate): new methods
+
+
+2008-12-01 Josh Kropf <josh@slashdev.ca>
+
     * ApplicationType.java (generate): use just file name instead of relative
       path for cod files in .alx file
     * Utils.java: new class, static methods for working with File/Resource

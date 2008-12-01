@@ -108,7 +108,7 @@ public class AlxTask extends BaseTask {
          DOMSource domSource = new DOMSource(xmldoc);
          TransformerFactory tf = TransformerFactory.newInstance();
          Transformer serializer = tf.newTransformer();
-         serializer.setOutputProperty(OutputKeys.ENCODING, "ISO-8859-1");
+         serializer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
          serializer.setOutputProperty(OutputKeys.INDENT, "yes");
          
          // this is needed to make indenting work, works with XALAN only

@@ -19,17 +19,16 @@
  */
 package ca.slashdev.bb.types;
 
-import java.util.Vector;
-
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.DataType;
 import org.apache.tools.ant.types.ResourceCollection;
+import org.apache.tools.ant.types.resources.Union;
 
 /**
  * @author josh
  */
 public class CodSetType extends DataType {
-   private Vector<ResourceCollection> resources = new Vector<ResourceCollection>();
+   private Union resources = new Union();
    
    private String dir;
    private VersionMatch greater;
@@ -89,7 +88,7 @@ public class CodSetType extends DataType {
       return val.toString();
    }
    
-   public Vector<ResourceCollection> getResources() {
+   public Union getResources() {
       return resources;
    }
 }

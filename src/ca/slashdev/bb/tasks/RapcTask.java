@@ -35,6 +35,7 @@ import org.apache.tools.ant.util.FileUtils;
 
 import ca.slashdev.bb.types.JdpType;
 import ca.slashdev.bb.types.TypeAttribute;
+import ca.slashdev.bb.util.Utils;
 
 /**
  * @author josh
@@ -357,7 +358,7 @@ public class RapcTask extends BaseTask
       // blackberry jde will create this file and pass it to the rapc command
       jdp.writeManifest(new File(destDir, output+".rapc"), output);
       
-      if (isOutOfDate(srcs, new File(destDir, output+".cod"))) {
+      if (!Utils.isUpToDate(srcs, new File(destDir, output+".cod"))) {
          log(String.format("Compiling %d source files to %s", srcs.size(), output+".cod"));
          executeRapc();
       } else {
@@ -489,6 +490,7 @@ public class RapcTask extends BaseTask
          PrintStream output = null;
          try {
             output = new PrintStream(new File(destDir, sourceListFile));
+            
             for (String file : srcs.list()) {
                // full path of each file, followed by newline character
                output.println(file);

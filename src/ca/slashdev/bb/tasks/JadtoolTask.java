@@ -79,6 +79,7 @@ public class JadtoolTask extends BaseTask {
       executeRewrite();
    }
    
+   @SuppressWarnings("unchecked")
    private void executeRewrite() {
       BufferedReader reader = null;
       PrintStream output = null;

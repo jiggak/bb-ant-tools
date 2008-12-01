@@ -21,14 +21,13 @@ package ca.slashdev.bb.tasks;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Vector;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Java;
-import org.apache.tools.ant.types.Path;
+import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.ResourceCollection;
-import org.apache.tools.ant.util.FileUtils;
+import org.apache.tools.ant.types.resources.Union;
 
 /**
  * Sigtool task will launch the signature tool on a given cod file or set of
@@ -46,14 +45,7 @@ public class SigtoolTask extends BaseTask
    private String password;
    
    private File codFile;
-   private Vector<ResourceCollection> codFiles = new Vector<ResourceCollection>();
-   private Path cods;
-   
-   @Override
-   public void init() throws BuildException {
-      cods = new Path(getProject());
-      super.init();
-   }
+   private Union codFiles = new Union();
    
    /**
     * Sets the jde home directory and attempts to locate the
@@ -114,13 +106,9 @@ public class SigtoolTask extends BaseTask
    }
    
    /**
-    * Adds codPath to path of cod files to sign
-    * @param codPath
+    * Adds collection of cod files to sign (<fileset>, <filelist>, etc).
+    * @param rc
     */
-   public void addCod(Path codPath) {
-      cods.add(codPath);
-   }
-   
    public void add(ResourceCollection rc) {
       codFiles.add(rc);
    }
@@ -133,41 +121,41 @@ public class SigtoolTask extends BaseTask
          throw new BuildException("jdehome not set");
       }
       
-      if (cods.size() == 0 && codFile == null) {
-         throw new BuildException("cods attribute or <cod> element required!");
+      if (codFiles.size() == 0 && codFile == null) {
+         throw new BuildException("codfile attribute or nested resource collection element required");
       }
       
-      if (codFile != null && cods.size() > 0) {
-         throw new BuildException("codfile attribute cant be used in conjunction with <cod> element");
+      if (codFile != null && codFiles.size() > 0) {
+         throw new BuildException("codfile attribute cant be used in conjunction with nested elements");
       }
       
-      if (codFile != null) {
-         String codFilePath = codFile.getAbsolutePath();
-         File touchFile = new File(codFilePath.replace(".cod", ".signed"));
+      File touchFile = new File(".signed");
+      if (touchFile.exists()) {
+         long lastSigned = touchFile.lastModified();
          
-         long beforeSize = codFile.length();
-         
-         if (!FileUtils.getFileUtils().isUpToDate(codFile, touchFile, 0)) {
-            cods.add(new Path(getProject(), codFilePath));
-            executeSigtool();
-            
-            long afterSize = codFile.length();
-            
-            if (beforeSize == afterSize) {
-               log("cod file does not appear to be modified", Project.MSG_WARN);
-            } else {
-               // sleep for one second before creating the touch file
-               try { Thread.sleep(1000); }
-               catch (InterruptedException e) { }
-               
-               touch(touchFile);
+         if (codFile != null) {
+            if (codFile.lastModified() < lastSigned) {
+               log("cod file does not appear to be modified since last signature", Project.MSG_WARN);
+               return;
             }
          } else {
-            log("cod file already signed");
+            boolean upToDate = true;
+            
+            for (Resource r : codFiles.listResources()) {
+               if (r.getLastModified() >= lastSigned) {
+                  upToDate = false;
+                  break;
+               }
+            }
+            
+            if (upToDate) {
+               log("cod files do not appear to be modified since last signature", Project.MSG_WARN);
+               return;
+            }
          }
-      } else {
-         executeSigtool();
       }
+      
+      executeSigtool();
    }
    
    private void executeSigtool() {
@@ -189,11 +177,14 @@ public class SigtoolTask extends BaseTask
       if (close) java.createArg().setValue("-c");
       if (request) java.createArg().setValue("-a");
       
-      for (String file : cods.list()) {
+      for (String file : codFiles.list()) {
          java.createArg().setFile(new File(file));
       }
       
-      java.execute();
+      if (java.executeJava() == 0) {
+         File touchFile = new File(".signed");
+         touch(touchFile);
+      }
    }
    
    /*

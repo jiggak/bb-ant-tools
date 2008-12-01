@@ -6,17 +6,19 @@ Prerequisites:
 --------------
 
 - RIM JDE (tested with 4.1 and up)
-- Apache Ant (1.7.x or higher)
-- bb-ant-tools-X-Y.jar
+- Java 1.5 or higher
+- Apache Ant 1.7.x or higher
 
 
 
 Using:
 ------
 
-- Copy the bb-ant-tools.jar into the your Ant lib directory, or just add it to
-  the classpath in your build script.
+- Copy the bb-ant-tools.jar into the your Ant lib directory, in $HOME/.ant/lib,
+  or add bb-ant-tools.jar to the classpath in your build script.
 - Add the <typedef> to your build script, eg:
+  <typedef resource="bb-ant-defs.xml" />
+    or
   <typedef resource="bb-ant-defs.xml" classpathref="bb-ant-tools.classpath" />
 - Enjoy (see examples below)
 
@@ -25,37 +27,142 @@ Using:
 Reference:
 ----------
 
-All tasks will first try to get the "jde.home" property from the project.
-If this property is not set, then the "jdehome" attribute must be explicitly
-set for each task.
+The <rapc> and <sigtool> tasks will first try to get the "jde.home" property
+from the project.  If this property is not set, then the "jdehome" attribute
+must be explicitly set for these tasks.
 
-Rapc task:
-==========
-Attributes
-jdehome   - optional: jde home directory
-jdkhome   - optional: alternate JVM home directory for launching rapc
-srcdir    - directory of source files
-destdir   - optional: cod file output directory, defaults to build directory
-exepath   - optional: tells rapc which directory contains preverify executable
-output    - required: name of output files eg: <output>.cod, <output>.cso
-import    - optional: path of jar files to import
-importref - optional: reference to imports path
-defines   - optional: colon (or semi-colon) delimited list of preprocessor tags
+<rapc>
 
-quiet     - optional: tells the rapc command to be less chatty, default is true
-verbose   - optional: turns on verbose output, default is false
-nodebug   - optional: do not generate .debug files, default is false
-nowarn    - optional: disable warning messages, default is false
-warnerror - optional: treat all warnings as errors, default is false
-noconvert - optional: don't convert images to png, default is false
+Runs the rapc compiler. The rapc task runs the compiler in much the same way
+as the RIM JDE.  The JDE project/workspace files are however not used for
+building cod files.  The nested <jdp> element is used to specify all cod file
+properties.
 
-Nested elements
-<define> - define preprocessor tag using nested elements
-   tag - tag name to define (eg: #ifdef THE_DEFINED_TAG)
-   if - define tag only when the named property is set
-   unless - define tag only when named property is not set
-<src> - path-like structure of files (.java, .png, etc)
-<import> - path-like structure of import jars
+The rapc task behaves similar to the javac task in that it will check the
+modified time of the source files and compare it to the modified time of the
+cod file. It will compile if one or more of the source files is newer than
+the existing cod file.
+
+   Parameters
+  ============
+
+  jdehome
+  ----------------------------------------------------------------------------
+  Sets the JDE home directory.  This attribute is required when the "jde.home"
+  property is not defined at the project level.
+  
+  jdkhome
+  ----------------------------------------------------------------------------
+  Sets an alternative JVM home directory.  Use this to override the version
+  of the JVM used to execute the rapc compiler.  When this attribute is not
+  defined, the systems default JVM is used.
+  
+  srcdir
+  ----------------------------------------------------------------------------
+  Directory containing source files.  This attribute is required when the
+  nested <src> property is not used.  An error is occurs if both the nested
+  <src> property and the "srcdir" attribute is specified.
+  
+  destdir
+  ----------------------------------------------------------------------------
+  Output directory of .cod file.  When not defined, the base directory of the
+  Ant build file is used.
+  
+  exepath
+  ----------------------------------------------------------------------------
+  Explicitly define the directory containing the preverify command used by
+  the rapc compiler.  When not defined, the systems default PATH is used.
+  
+  output
+  ----------------------------------------------------------------------------
+  Name of output file, eg: <output>.cod, <output>.cso, etc.  This attribute
+  is required.
+  
+  import
+  ----------------------------------------------------------------------------
+  Path of .jar files to import.  Path strings consist of relative or absolute
+  path names delimited by a ';' (Windows) or ':' (Unix) character.  The rapc
+  task will always add the net_rim_api.jar file by default.  This attribute
+  is optional.
+  
+  importref
+  ----------------------------------------------------------------------------
+  Path of .jar files to import given as a reference to a path defined
+  elsewhere.  The rapc task will always add the net_rim_api.jar file by
+  default.  This attribute is optional.
+
+  defines
+  ----------------------------------------------------------------------------
+  ':' or ';' delimited list of preprocessor tags.  This attribute is optional.
+  See the note below regarding preprocessor usage.
+
+  quiet
+  ----------------------------------------------------------------------------
+  Tells the rapc compiler to be less chatty.  Optional, defaults to true.
+  
+  verbose
+  ----------------------------------------------------------------------------
+  Turn on verbose output of the rapc compiler.  Optional, defaults to false.
+  
+  nodebug
+  ----------------------------------------------------------------------------
+  Turn off generation of .debug files.  Optional, defaults to false.
+  
+  nowarn
+  ----------------------------------------------------------------------------
+  Disable warning messages.  Optional, defaults to false.
+  
+  warnerror
+  ----------------------------------------------------------------------------
+  Treat all warnings as errors.  Optional, defaults to false.
+  
+  noconvert
+  ----------------------------------------------------------------------------
+  Do not convert all images to PNG.  Optional, defaults to false.
+  
+  generatesourcelist
+  ----------------------------------------------------------------------------
+  Generate list of source files in text file.  Set this to true when java
+  returns "CreateProcess error=87" on Windows.  Optional, defaults to false.
+  
+  sourcelistfile
+  ----------------------------------------------------------------------------
+  Set the name of the source list file.  Use this to override the name of
+  the file created when "generatesourcelist" is set to true.  The default
+  file name is "sources.txt".
+
+   Parameters specified as nested elements
+  =========================================
+  
+  <define>
+  ----------------------------------------------------------------------------
+  Zero or more preprocessor tag definitions nested as elements.
+    
+    tag
+    ------------------------------------------------------------------------
+    Named of preprocessor tag eg: THE_DEFINED_TAG.  Required.
+    
+    if
+    ------------------------------------------------------------------------
+    Define tag only when the named property is set.  Optional.
+    
+    unless
+    ------------------------------------------------------------------------
+    Define tag only when the named property is NOT set.  Optional.
+  
+  <src>
+  ----------------------------------------------------------------------------
+  Path like structure of files to compile.  The <src> element can contain
+  <fileset>, <filelist>, or any other path like element.  A path defined
+  elsewhere can be referenced by setting the "refid" attribute of <src>.
+  If the "srcdir" attribute was not defined, the <src> element must contain
+  one or more resources to compile.
+  
+  <import>
+  ----------------------------------------------------------------------------
+  - path-like structure of import jars
+  
+
 <jdp> - collection of project attributes
    type - library,cldc,midlet defaults to cldc
    title - module title
@@ -110,6 +217,44 @@ password   - optional: removes the interactive password prompt, this implicitly
 Nested elements
 <cod> - path-like structure of cod files
 
+Alx task:
+=============
+Alx task creates a directory structure of cod files and an .alx file.  The
+purpose of the task is to generate a directory that can be easily zipped
+for creating an installation package.  Therefore cod files are always
+copied to the destination directory.
+
+The task fully supports generating expressions that limit which files will
+be selected by the application loader (Loader.exe) based on OS version.
+
+Attributes
+destdir  - required: destination directory for .cod files and .alx file
+filename - required: name of .alx file to generate
+
+Nested elements
+<application> - nested element of <alx>
+   id   - required: unique id of application, eg: com.mycompany.myapp
+   
+   ** following attributes are for informational purposes only in the
+      application loader (Loader.exe)
+
+   name        - application name
+   description - application description
+   version     - version number, eg: 1.0
+   vendor      - vendor string, eg: My Company
+   copyright   - copyright information
+   
+   file - optinally specify properties file of application attributes, must
+          match names defined above
+          *NOTE: 'title' is recognized as an alias for 'name' so properties
+                 files created for <jdp> type can be used here as well
+
+   <codset> - one or more nested elemenets of <application>
+      dir - optional: directory for cod files in destination directory
+      greaterthan - minimum version of operating system
+   
+   
+   
 
 
 Preprocessor:

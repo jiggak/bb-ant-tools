@@ -28,11 +28,13 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.apache.tools.ant.types.Resource;
+import org.apache.tools.ant.types.ResourceCollection;
 import org.apache.tools.ant.util.FileUtils;
 
 /**
@@ -152,5 +154,34 @@ public final class Utils {
       } finally {
          FileUtils.close(in);
       }
+   }
+   
+   @SuppressWarnings("unchecked")
+   public static boolean isUpToDate(ResourceCollection src, File target) {
+      if (!target.exists())
+         return false;
+      
+      long targetLastModified = target.lastModified();
+      
+      Iterator<Resource> i = src.iterator();
+      while (i.hasNext()) {
+         if (i.next().getLastModified() > targetLastModified)
+            return false;
+      }
+      
+      return true;
+   }
+   
+   /**
+    * Returns true if target is newer than (or same age as) source.
+    * @param src source file (the one used to create target)
+    * @param target target file (depends on source file)
+    * @return true if target is up to date
+    */
+   public static boolean isUpToDate(File src, File target) {
+      if (!target.exists())
+         return false;
+      
+      return target.lastModified() >= src.lastModified();
    }
 }

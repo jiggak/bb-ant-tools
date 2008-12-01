@@ -29,7 +29,6 @@ import java.util.Vector;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.DataType;
 import org.apache.tools.ant.types.Resource;
-import org.apache.tools.ant.types.ResourceCollection;
 import org.apache.tools.ant.types.resources.FileResource;
 import org.apache.tools.ant.util.ResourceUtils;
 import org.w3c.dom.Document;
@@ -136,6 +135,7 @@ public class ApplicationType extends DataType {
       }
    }
    
+   @SuppressWarnings("unchecked")
    public void generate(Document xmldoc, Element parent) {
       if (id == null) {
          throw new BuildException("id attribute is reqired");
@@ -198,13 +198,11 @@ public class ApplicationType extends DataType {
          }
          
          StringBuffer files = new StringBuffer();
-         for (ResourceCollection collection : codSet.getResources()) {
-            Iterator<Resource> i = collection.iterator();
-            while (i.hasNext()) {
-               files.append('\n').append(Utils.getFilePart(i.next()));
-            }
-            files.append('\n');
+         Iterator<Resource> i = codSet.getResources().iterator();
+         while (i.hasNext()) {
+            files.append('\n').append(Utils.getFilePart(i.next()));
          }
+         files.append('\n');
          
          Element filesNode = xmldoc.createElement("files");
          filesNode.setTextContent(files.toString());
@@ -213,6 +211,7 @@ public class ApplicationType extends DataType {
       }
    }
    
+   @SuppressWarnings("unchecked")
    public void copyCodFiles(File destDir) throws IOException {
       Resource r;
       
@@ -224,13 +223,14 @@ public class ApplicationType extends DataType {
                   throw new IOException("unable to create cod files director");
          }
          
-         for (ResourceCollection rc : codSet.getResources()) {
-            Iterator<Resource> i = rc.iterator();
-            while (i.hasNext()) {
-               r = i.next();
-               ResourceUtils.copyResource(r,
-                     new FileResource(destDir, Utils.getFilePart(r)));
-            }
+         FileResource destFile;
+         Iterator<Resource> i = codSet.getResources().iterator();
+         while (i.hasNext()) {
+            r = i.next();
+            destFile = new FileResource(destDir, Utils.getFilePart(r));
+            
+            if (!r.equals(destFile))
+               ResourceUtils.copyResource(r, destFile);
          }
       }
    }
