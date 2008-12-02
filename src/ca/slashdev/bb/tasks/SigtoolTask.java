@@ -27,6 +27,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Java;
 import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.ResourceCollection;
+import org.apache.tools.ant.types.resources.FileResource;
 import org.apache.tools.ant.types.resources.Union;
 
 /**
@@ -129,33 +130,25 @@ public class SigtoolTask extends BaseTask
          throw new BuildException("codfile attribute cant be used in conjunction with nested elements");
       }
       
-      File touchFile = new File(".signed");
-      if (touchFile.exists()) {
-         long lastSigned = touchFile.lastModified();
-         
-         if (codFile != null) {
-            if (codFile.lastModified() < lastSigned) {
-               log("cod file does not appear to be modified since last signature", Project.MSG_WARN);
-               return;
-            }
-         } else {
-            boolean upToDate = true;
-            
-            for (Resource r : codFiles.listResources()) {
-               if (r.getLastModified() >= lastSigned) {
-                  upToDate = false;
-                  break;
-               }
-            }
-            
-            if (upToDate) {
-               log("cod files do not appear to be modified since last signature", Project.MSG_WARN);
-               return;
-            }
+      if (codFile != null)
+         codFiles.add(new FileResource(codFile));
+      
+      boolean upToDate = true;
+      File touchFile;
+      
+      for (Resource r : codFiles.listResources()) {
+         touchFile = new File(r.toString().replace(".cod", ".signed"));
+         if (r.getLastModified() >= touchFile.lastModified()) {
+            upToDate = false;
+            break;
          }
       }
       
-      executeSigtool();
+      if (upToDate) {
+         log("cod files do not appear to be modified since last signature", Project.MSG_WARN);
+      } else {
+         executeSigtool();
+      }
    }
    
    private void executeSigtool() {
@@ -182,17 +175,20 @@ public class SigtoolTask extends BaseTask
       }
       
       if (java.executeJava() == 0) {
-         File touchFile = new File(".signed");
-         touch(touchFile);
+         for (String file : codFiles.list()) {
+            touch(file);
+         }
       }
    }
    
    /*
-    * Creates a file (if it doesn't already exist) and explicitly sets
+    * Creates a touch file along side the cod file and explicitly sets
     * the last modified date to the current time.
     */
-   private void touch(File file) {
+   private void touch(String codFilePath) {
       try {
+         File file = new File(codFilePath.replace(".cod", ".signed"));
+         
          // create file if it doesn't already exist
          if (!file.exists()) file.createNewFile();
          

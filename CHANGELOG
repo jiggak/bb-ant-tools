@@ -1,3 +1,10 @@
+2008-12-02 Josh Kropf <josh@slashdev.ca>
+
+    * SigtoolTask.java (execute): cleaned/fixed code that checks touch file age
+      (executeSigtool): create touch files for each cod file signed
+      (touch): accept full path to cod file
+
+
 2008-12-01 Josh Kropf <josh@slashdev.ca>
 
     * AlxTask.java (executeAlx): omit xml declaration form generated .alx
