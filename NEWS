@@ -1,3 +1,21 @@
+  December 4, 2008
+============================================
+
+Ready to release 1.0.0.  Here is a breakdown of the changes:
+
+ + <alx> new task, generates .alx file and copy .cod files
+ + <jadtool> new task, update .jad file and extract sibling .cod files
+
+ * Removed <cod> nested element from <sigtool>.  The <sigtool> task can
+   now accept resource collection types (fileset, filelist) as direct
+   nested elements.
+ * Added support to the <rapc> task for generating a text file listing
+   all the source files and passing said file to the rapc compiler.  This
+   is a workaround for an error that can occur on Windows operating system
+   when building a project with many files or long pathnames.
+
+
+
   November 30, 2008
 ============================================
 BB-Ant-Tools is poised to undergo some enhancements.  I am working on adding
