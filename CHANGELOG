@@ -1,3 +1,8 @@
+2009-01-09 Josh Kropf <josh@slashdev.ca>
+
+   * JdpType.java (getDesc, setDesc): renamed to getDescription, setDescription
+
+
 2008-12-02 Josh Kropf <josh@slashdev.ca>
 
     * SigtoolTask.java (execute): cleaned/fixed code that checks touch file age

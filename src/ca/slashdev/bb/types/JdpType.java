@@ -101,11 +101,11 @@ public class JdpType extends DataType {
       this.version = version;
    }
    
-   public String getDesc() {
+   public String getDescription() {
       return description;
    }
    
-   public void setDesc(String desc) {
+   public void setDescription(String desc) {
       this.description = desc;
    }
    

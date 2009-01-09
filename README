@@ -456,6 +456,9 @@ be selected by the application loader (Loader.exe) based on OS version.
     ------------------------------------------------------------------------
     One or more nested elements of <application> element.
     
+    Cod files must be listed using nested resource collections such as
+    <fileset> and <filelist>.
+    
     Cod file sets can be used to target specific versions of the BlackBerry
     software by setting either or both of the greaterthan and lessthan
     properties.  Both properties have the alternate inclusive version
