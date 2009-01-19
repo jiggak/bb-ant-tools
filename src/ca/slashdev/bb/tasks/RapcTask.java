@@ -355,6 +355,24 @@ public class RapcTask extends BaseTask
          throw new BuildException("srcdir attribute or <src> element required!");
       }
       
+      String[] files = srcs.list();
+      srcs = new Path(getProject());
+      File f;
+      
+      // iterate through all source files
+      for (String file : files) {
+         f = new File(file);
+         
+         // when source file is actually a directory, create fileset
+         if (f.isDirectory()) {
+            FileSet fs = new FileSet();
+            fs.setDir(f);
+            srcs.addFileset(fs);
+         } else { // otherwise add the source file back into the path object
+            srcs.setLocation(f);
+         }
+      }
+      
       // blackberry jde will create this file and pass it to the rapc command
       jdp.writeManifest(new File(destDir, output+".rapc"), output);
       

@@ -1,6 +1,14 @@
+2009-01-18 Josh Kropf <josh@slashdev.ca>
+
+    * JadtoolTask.java (executeRewrite): fixed bug that would generate .jad
+      file with all RIM-COD-* properties to end with 1
+    * RapcTask.java (execute): added feature to expand directories listed
+      in the nested source path tags, eg: <src path="dir1;dir2" />
+
+
 2009-01-09 Josh Kropf <josh@slashdev.ca>
 
-   * JdpType.java (getDesc, setDesc): renamed to getDescription, setDescription
+    * JdpType.java (getDesc, setDesc): renamed to getDescription, setDescription
 
 
 2008-12-02 Josh Kropf <josh@slashdev.ca>

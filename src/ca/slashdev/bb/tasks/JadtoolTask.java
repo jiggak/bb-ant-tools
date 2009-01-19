@@ -114,7 +114,7 @@ public class JadtoolTask extends BaseTask {
          }
          
          try {
-            int num = 1;
+            int num = 0;
             File destFile;
             Resource r;
             
@@ -130,16 +130,30 @@ public class JadtoolTask extends BaseTask {
                      for (String entry : zipEntries) {
                         destFile = new File(destDir, entry);
                         
-                        output.printf("RIM-COD-URL-%d: %s\n", num, destFile.getName());
-                        output.printf("RIM-COD-SHA1-%d:%s\n", num, Utils.getSHA1(destFile));
-                        output.printf("RIM-COD-Size-%d: %d\n", num, destFile.length());
+                        if (num == 0) {
+                           output.printf("RIM-COD-URL: %s\n", num, destFile.getName());
+                           output.printf("RIM-COD-SHA1: %s\n", num, Utils.getSHA1(destFile));
+                           output.printf("RIM-COD-Size: %d\n", num, destFile.length());
+                        } else {
+                           output.printf("RIM-COD-URL-%d: %s\n", num, destFile.getName());
+                           output.printf("RIM-COD-SHA1-%d: %s\n", num, Utils.getSHA1(destFile));
+                           output.printf("RIM-COD-Size-%d: %d\n", num, destFile.length());
+                        }
+                        
+                        num++;
                      }
                   } else {
                      ResourceUtils.copyResource(r, new FileResource(destFile));
                      
-                     output.printf("RIM-COD-URL-%d: %s\n", num, destFile.getName());
-                     output.printf("RIM-COD-SHA1-%d:%s\n", num, Utils.getSHA1(destFile));
-                     output.printf("RIM-COD-Size-%d: %d\n", num, destFile.length());
+                     if (num == 0) {
+                        output.printf("RIM-COD-URL: %s\n", num, destFile.getName());
+                        output.printf("RIM-COD-SHA1: %s\n", num, Utils.getSHA1(destFile));
+                        output.printf("RIM-COD-Size: %d\n", num, destFile.length());
+                     } else {
+                        output.printf("RIM-COD-URL-%d: %s\n", num, destFile.getName());
+                        output.printf("RIM-COD-SHA1-%d: %s\n", num, Utils.getSHA1(destFile));
+                        output.printf("RIM-COD-Size-%d: %d\n", num, destFile.length());
+                     }
                   }
                   
                   num ++;
