@@ -131,9 +131,9 @@ public class JadtoolTask extends BaseTask {
                         destFile = new File(destDir, entry);
                         
                         if (num == 0) {
-                           output.printf("RIM-COD-URL: %s\n", num, destFile.getName());
-                           output.printf("RIM-COD-SHA1: %s\n", num, Utils.getSHA1(destFile));
-                           output.printf("RIM-COD-Size: %d\n", num, destFile.length());
+                           output.printf("RIM-COD-URL: %s\n", destFile.getName());
+                           output.printf("RIM-COD-SHA1: %s\n", Utils.getSHA1(destFile));
+                           output.printf("RIM-COD-Size: %d\n", destFile.length());
                         } else {
                            output.printf("RIM-COD-URL-%d: %s\n", num, destFile.getName());
                            output.printf("RIM-COD-SHA1-%d: %s\n", num, Utils.getSHA1(destFile));
@@ -146,9 +146,9 @@ public class JadtoolTask extends BaseTask {
                      ResourceUtils.copyResource(r, new FileResource(destFile));
                      
                      if (num == 0) {
-                        output.printf("RIM-COD-URL: %s\n", num, destFile.getName());
-                        output.printf("RIM-COD-SHA1: %s\n", num, Utils.getSHA1(destFile));
-                        output.printf("RIM-COD-Size: %d\n", num, destFile.length());
+                        output.printf("RIM-COD-URL: %s\n", destFile.getName());
+                        output.printf("RIM-COD-SHA1: %s\n", Utils.getSHA1(destFile));
+                        output.printf("RIM-COD-Size: %d\n", destFile.length());
                      } else {
                         output.printf("RIM-COD-URL-%d: %s\n", num, destFile.getName());
                         output.printf("RIM-COD-SHA1-%d: %s\n", num, Utils.getSHA1(destFile));
