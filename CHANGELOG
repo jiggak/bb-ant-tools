@@ -1,3 +1,19 @@
+2009-02-10 Josh Kropf <josh@slashdev.ca>
+
+   * Merged Jeremy Wall's bug fixes and enhancements
+   * ApplicationType.java: added version match properties to application tag
+     (generate): apply version match to both codSet and application tags
+     (generate): always include name,description,version,vendor,copyright
+     tags even if the contents is empty
+   * CodSetType.java (VersionMatch): removed package local class
+     (getVersionMatch): fixed version match string to use correct order of
+     square bracket and parentheses for inclusive and exclusive versions
+   * EntryPointType.java: added if and unless attributes
+   * JdpType.java (writeManifest): conditionally include alternate entry points
+   * Utils.java (getSHA1): pad hex byte with zero if less than two chars long
+   * VersionMatch.java: moved from package local class to public class
+
+
 2009-01-18 Josh Kropf <josh@slashdev.ca>
 
     * JadtoolTask.java (executeRewrite): fixed bug that would generate .jad

@@ -290,6 +290,14 @@ the existing cod file.
       --------------------------------------------------------------------
       Properties file containing the project attributes.  Property names
       must match the names defined above.
+      
+      if
+      --------------------------------------------------------------------
+      Include entry point when the named property is set.  Optional.
+      
+      unless
+      --------------------------------------------------------------------
+      Include entry point when the named property is NOT set.  Optional.
 
  Preprocessor
 ==============
@@ -452,6 +460,26 @@ be selected by the application loader (Loader.exe) based on OS version.
     match names defined above.  *NOTE*: 'title' is recognized as an alias
     for 'name' so properties files created for <jdp> type can be used here.
 
+    greaterthan
+    ------------------------------------------------------------------------
+    Only install application on versions of the BlackBerry software greater
+    than the given version.
+    
+    greaterthanequal
+    ------------------------------------------------------------------------
+    Only install application on versions of the BlackBerry software greater
+    than or equal to the given version.
+    
+    lessthan
+    ------------------------------------------------------------------------
+    Only install application on versions of the BlackBerry software less than
+    the given version.
+    
+    lessthanequal
+    ------------------------------------------------------------------------
+    Only install application on versions of the BlackBerry software less than
+    or equal to the given version.
+
     <codset>
     ------------------------------------------------------------------------
     One or more nested elements of <application> element.
@@ -566,10 +594,3 @@ Licensing:
 ----------
 This product is distributed under the GPL. Please read through the file
 COPYING for more information about our license.
-
-
-
-Contact:
---------
-Josh Kropf
-josh@slashdev.ca

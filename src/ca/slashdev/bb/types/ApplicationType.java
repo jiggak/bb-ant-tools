@@ -35,6 +35,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import ca.slashdev.bb.util.Utils;
+import ca.slashdev.bb.util.VersionMatch;
 
 /**
  * @author josh
@@ -46,6 +47,8 @@ public class ApplicationType extends DataType {
    private String version;
    private String vendor;
    private String copyright;
+   private VersionMatch greater;
+   private VersionMatch less;
    private Vector<CodSetType> codSets = new Vector<CodSetType>();
    
    public void setId(String id) {
@@ -99,9 +102,48 @@ public class ApplicationType extends DataType {
    public String getCopyright() {
       return copyright;
    }
+
+   public void setGreaterThan(String version) throws BuildException {
+      greater = new VersionMatch(version, false);
+   }
+   
+   public void setGreaterThanEqual(String version) {
+      greater = new VersionMatch(version, true);
+   }
+   
+   public void setLessThan(String version) {
+      less = new VersionMatch(version, false);
+   }
+   
+   public void setLessThanEqual(String version) {
+      less = new VersionMatch(version, true);
+   }
+   
+   public boolean hasVersionMatch() {
+      return greater != null || less != null;
+   }
    
    public void addCodSet(CodSetType codSet) {
       codSets.add(codSet);
+   }
+
+   public String getVersionMatch() {
+      StringBuffer val = new StringBuffer();
+      
+      if (greater != null) {
+         val.append(greater.isInclusive()? "[" : "(");
+         val.append(greater.getVersion()).append(',');
+      } else {
+         val.append("(,");
+      }
+      
+      if (less != null) {
+         val.append(less.getVersion()).append(less.isInclusive()? "]" : ")");
+      } else {
+         val.append(")");
+      }
+      
+      return val.toString();
    }
    
    public void setFile(File file) throws BuildException {
@@ -146,35 +188,41 @@ public class ApplicationType extends DataType {
       
       appNode.setAttribute("id", id);
       
+      String appBBVer = null;
+      if (hasVersionMatch()) {
+         appBBVer = getVersionMatch();
+         appNode.setAttribute("_blackberryVersion", appBBVer);
+      }
+      
+      appNode.appendChild(child = xmldoc.createElement("name"));
       if (name != null) {
-         appNode.appendChild(child = xmldoc.createElement("name"));
          child.setTextContent(name);
       }
       
+      appNode.appendChild(child = xmldoc.createElement("description"));
       if (description != null) {
-         appNode.appendChild(child = xmldoc.createElement("description"));
          child.setTextContent(description);
       }
-      
+
+      appNode.appendChild(child = xmldoc.createElement("version"));      
       if (version != null) {
-         appNode.appendChild(child = xmldoc.createElement("version"));
          child.setTextContent(version);
       }
       
+      appNode.appendChild(child = xmldoc.createElement("vendor"));
       if (vendor != null) {
-         appNode.appendChild(child = xmldoc.createElement("vendor"));
          child.setTextContent(vendor);
       }
-      
+
+      appNode.appendChild(child = xmldoc.createElement("copyright"));      
       if (copyright != null) {
-         appNode.appendChild(child = xmldoc.createElement("copyright"));
          child.setTextContent(copyright);
       }
       
       for (CodSetType codSet : codSets) {
-         String bbVer = null;
+         String codSetBBVer = null;
          if (codSet.hasVersionMatch()) {
-            bbVer = codSet.getVersionMatch();
+            codSetBBVer = codSet.getVersionMatch();
          }
          
          if (codSet.getDir() != null) {
@@ -182,9 +230,9 @@ public class ApplicationType extends DataType {
             appNode.appendChild(child);
             child.setTextContent(codSet.getDir());
             
-            if (bbVer != null) {
-               child.setAttribute("_blackberryVersion", bbVer);
-               bbVer = null;
+            if (codSetBBVer != null) {
+               child.setAttribute("_blackberryVersion", codSetBBVer);
+               codSetBBVer = null;
             }
          }
          
@@ -193,8 +241,8 @@ public class ApplicationType extends DataType {
          
          child.setAttribute("Java", "1.0");
          
-         if (bbVer != null) {
-            child.setAttribute("_blackberryVersion", bbVer);
+         if (codSetBBVer != null) {
+            child.setAttribute("_blackberryVersion", codSetBBVer);
          }
          
          StringBuffer files = new StringBuffer();

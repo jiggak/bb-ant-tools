@@ -24,6 +24,8 @@ import org.apache.tools.ant.types.DataType;
 import org.apache.tools.ant.types.ResourceCollection;
 import org.apache.tools.ant.types.resources.Union;
 
+import ca.slashdev.bb.util.VersionMatch;
+
 /**
  * @author josh
  */
@@ -73,14 +75,14 @@ public class CodSetType extends DataType {
       StringBuffer val = new StringBuffer();
       
       if (greater != null) {
-         val.append(greater.isInclusive()? "(" : "[");
+         val.append(greater.isInclusive()? "[" : "(");
          val.append(greater.getVersion()).append(',');
       } else {
          val.append("(,");
       }
       
       if (less != null) {
-         val.append(less.getVersion()).append(less.isInclusive()? ")" : "]");
+         val.append(less.getVersion()).append(less.isInclusive()? "]" : ")");
       } else {
          val.append(")");
       }
@@ -90,45 +92,5 @@ public class CodSetType extends DataType {
    
    public Union getResources() {
       return resources;
-   }
-}
-
-class VersionMatch {
-   private String version;
-   private boolean inclusive;
-   
-   public VersionMatch(String version, boolean inclusive) {
-      this.version = version;
-      this.inclusive = inclusive;
-   }
-   
-   public boolean isInclusive() {
-      return inclusive;
-   }
-   
-   public String getVersion() {
-      return version;
-   }
-   
-   public void validate() throws BuildException {
-      int dot1 = version.indexOf('.');
-      if (dot1 == -1)
-         throw new BuildException("version must be in the form 'x.y.z'");
-      
-      int dot2 = version.indexOf('.', dot1+1);
-      if (dot2 == -1)
-         throw new BuildException("version must be in the form 'x.y.z'");
-      
-      String num1 = version.substring(0, dot1);
-      String num2 = version.substring(dot1+1, dot2);
-      String num3 = version.substring(dot2+1);
-      
-      try {
-         Integer.parseInt(num1);
-         Integer.parseInt(num2);
-         Integer.parseInt(num3);
-      } catch (NumberFormatException e) {
-         throw new BuildException("version must be in the form 'x.y.z'", e);
-      }
    }
 }

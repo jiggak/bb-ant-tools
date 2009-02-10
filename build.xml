@@ -10,7 +10,7 @@
    <path id="build.classpath">
       <fileset dir="${ant.library.dir}" includes="*.jar" />
    </path>
-
+	
    <target name="compile">
       <mkdir dir="${output.dir}" />
       <javac srcdir="${src.dir}" destdir="${output.dir}" debug="true" target="1.5"
@@ -41,31 +41,29 @@
          </filterset>
       </copy>
    	
-   	<copy todir="${release.dir}">
-   		<fileset dir="${basedir}" includes="CHANGELOG,COPYING,NEWS" />
-   		<fileset dir="${basedir}" includes="src/**/*.java,etc/*,build.*">
-   			<include name="src/**/*.java" />
-   			<include name="etc/**/*" />
-   			<include name="build.*" />
-   		</fileset>
-   	</copy>
-   	
    	<copy file="${build.jar.file}" todir="${release.dir}" />
    	
       <zip destfile="${binpkg.zip.file}">
-         <fileset dir="${release.dir}"
-         	      includes="CHANGELOG,COPYING,README,NEWS,${build.jar.file}" />
+      	<fileset dir="${basedir}" includes="CHANGELOG,COPYING,NEWS,AUTHORS" />
+      	<fileset dir="${release.dir}" file="README"/>
+         <fileset dir="${release.dir}" file="${build.jar.file}"/>
       </zip>
+   	
       <zip destfile="${srcpkg.zip.file}">
-         <fileset dir="${release.dir}"
-         	      includes="CHANGELOG,COPYING,README,NEWS,src/**/*,etc/*,build.*" />
+      	<fileset dir="${basedir}" includes="README,CHANGELOG,COPYING,NEWS,AUTHORS" />
+         <fileset dir="${basedir}">
+         	<include name="src/**/*"/>
+         	<include name="website/**/*"/>
+         	<include name="etc/**/*"/>
+         	<include name="build.*"/>
+         </fileset>
       </zip>
    </target>
 
    <target name="clean">
       <delete dir="${output.dir}" />
-   	<delete dir="${release.dir}" />
-   	<delete dir="${build.jar.file}" />
+      <delete dir="${release.dir}" />
+      <delete file="${build.jar.file}" />
    </target>
 
    <target name="distclean" depends="clean">

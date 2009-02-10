@@ -145,7 +145,8 @@ public final class Utils {
          
          StringBuffer str = new StringBuffer();
          for (byte b : hash) {
-            str.append(' ').append(Integer.toHexString(b & 0xff));
+            str.append(' ');
+            str.append(String.format("%02x", (b & 0xff)));
          }
          
          return str.toString();

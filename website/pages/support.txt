@@ -1,0 +1,6 @@
+## Support Options ##
+
+This is still beta software.  As a result, there is probably bugs.  Please send
+an email to the [mailing list](http://sourceforge.net/mail/?group_id=195339) to
+report a bug or request a new feature.
+

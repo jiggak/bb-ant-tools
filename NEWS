@@ -1,3 +1,21 @@
+  February 10, 2009
+============================================
+
+Release 1.1.0
+
+Jeremy Wall has submitted several bug fixes and new features.  The feature set
+seems significant enough to increment the minor version digit.
+
+ + <entry> alternate entry points can be conditionally compiled
+ + <application> when generating .alx files, both application and codset tags
+   now support BlackBerry OS version matching expressions
+ 
+ * fixed bad formatting in SHA hash when generating .jad files
+ * always include name, description, version, vendor, copyright child tags
+   when generating application tag in .alx files to avoid problems with loader
+ * corrected inclusive and exclusive brackets for BlackBerry version matching
+
+
   December 4, 2008
 ============================================
 

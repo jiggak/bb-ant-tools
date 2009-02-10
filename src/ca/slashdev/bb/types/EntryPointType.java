@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.DataType;
 
 /**
@@ -45,6 +46,8 @@ public class EntryPointType extends DataType {
    private String icon;
    private String nameResourceBundle;
    private int nameResourceId;
+   private String ifCond;
+   private String unlessCond;
    
    public EntryPointType() {
       title = "";
@@ -53,6 +56,24 @@ public class EntryPointType extends DataType {
       startupTier = 7;
       ribbonPosition = 0;
       nameResourceId = -1;
+   }
+   
+   /**
+    * Sets the if attribute.  The entry point is included during compilation
+    * when the property named by this attribute is defined in the project.
+    * @param ifCond
+    */
+   public void setIf(String ifCond) {
+      this.ifCond = ifCond;
+   }
+
+   /**
+    * Sets the unless attribute.  The entry point is included during compilation
+    * when the property named by this attribute is NOT defined in the project.
+    * @param unlessCond
+    */
+   public void setUnless(String unlessCond) {
+      this.unlessCond = unlessCond;
    }
    
    public String getTitle() {
@@ -161,6 +182,16 @@ public class EntryPointType extends DataType {
             try { in.close(); }
             catch (IOException e) { }
          }
+      }
+   }
+   
+   public boolean valid(Project p) {
+      if (ifCond != null && p.getProperty(ifCond) == null) {
+         return false;
+      } else if (unlessCond != null && p.getProperty(unlessCond) != null) {
+         return false;
+      } else {
+         return true;
       }
    }
 }

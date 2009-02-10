@@ -279,30 +279,32 @@ public class JdpType extends DataType {
             if (entryPoints.size() != 0) {
                int i = 2;
                for (EntryPointType entryPoint : entryPoints) {
-                  out.printf("MIDlet-%d: %s,%s,%s\n", i, entryPoint.getTitle(),
-                        entryPoint.getIcon(), entryPoint.getArguments());
+                  if(entryPoint.valid(getProject())) {
+                     out.printf("MIDlet-%d: %s,%s,%s\n", i, entryPoint.getTitle(),
+                           entryPoint.getIcon(), entryPoint.getArguments());
                   
-                  if (entryPoint.getRibbonPosition() > 0) {
-                     out.printf("RIM-MIDlet-Position-%d: %d\n", i, entryPoint.getRibbonPosition());
+                     if (entryPoint.getRibbonPosition() > 0) {
+                        out.printf("RIM-MIDlet-Position-%d: %d\n", i, entryPoint.getRibbonPosition());
+                     }
+   
+                     if (entryPoint.getNameResourceBundle() != null && entryPoint.getNameResourceId() > -1) {
+                        out.printf("RIM-MIDlet-NameResourceBundle-%d: %s\n", i, entryPoint.getNameResourceBundle());
+                        out.printf("RIM-MIDlet-NameResourceId-%d: %d\n", i, entryPoint.getNameResourceId());
+                     }
+   
+                     flags = 0x00;
+                     if (entryPoint.isRunOnStartup()) {
+                        flags |= 0xE1-((2*entryPoint.getStartupTier())<<4);
+                     }
+                     
+                     if (entryPoint.isSystemModule()) {
+                        flags |= 0x02;
+                     }
+                     
+                     out.printf("RIM-MIDlet-Flags-%d: %d\n", i, flags);
+                     
+                     i ++;
                   }
-
-                  if (entryPoint.getNameResourceBundle() != null && entryPoint.getNameResourceId() > -1) {
-                     out.printf("RIM-MIDlet-NameResourceBundle-%d: %s\n", i, entryPoint.getNameResourceBundle());
-                     out.printf("RIM-MIDlet-NameResourceId-%d: %d\n", i, entryPoint.getNameResourceId());
-                  }
-
-                  flags = 0x00;
-                  if (entryPoint.isRunOnStartup()) {
-                     flags |= 0xE1-((2*entryPoint.getStartupTier())<<4);
-                  }
-                  
-                  if (entryPoint.isSystemModule()) {
-                     flags |= 0x02;
-                  }
-                  
-                  out.printf("RIM-MIDlet-Flags-%d: %d\n", i, flags);
-                  
-                  i ++;
                }
             }
          } else if (TypeAttribute.MIDLET.equals(type.getValue())) {

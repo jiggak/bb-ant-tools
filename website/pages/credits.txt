@@ -1,0 +1,10 @@
+## Credit and Thanks ##
+
+* Jeremy Wall:
+  * patch, use resource bundle for application title
+  * bug fixes in .alx file generating
+  * conditionally include alternate entry points at build time
+* Derek Konigsberg: help/patch, preprocessor supoprt
+* atleta: patch, explicitly setting preverify tool search path
+* badgrs: patch, fixed incorrect naming of 'description' property
+* and everyone else who has taken the time to send support requests and emails

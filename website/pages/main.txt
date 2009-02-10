@@ -1,0 +1,18 @@
+## What is bb-ant-tools? ##
+
+Blackberry Ant Tools is a collection of ant tasks for building blackberry
+applications.  It's designed to be as simple as possible yet powerful enough
+to completely replace the RIM JDE.  However a copy of the JDE must be
+installed for the rapc and signature tool jar files.
+
+Blackberry Ant Tools use the executable jar files to run the rapc
+compiler and signature tool.  There is nothing windows specific about these
+ant tasks.  If you have a copy of the JDE and the J2ME preverify command
+somewhere in the path, the rapc compiler works fine on other operating
+systems (Linux, Mac OS X, etc).
+
+If you don't like something, provide
+[feedback](http://sourceforge.net/tracker/?group_id=195339&atid=953049)
+and we'll take a look.  Or better yet,
+[get the source](http://sourceforge.net/svn/?group_id=195339)
+and send in a patch!
