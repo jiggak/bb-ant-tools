@@ -24,7 +24,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Vector;
 
 import org.apache.tools.ant.BuildException;
@@ -34,6 +36,7 @@ import org.apache.tools.ant.types.resources.FileResource;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.ResourceUtils;
 
+import ca.slashdev.bb.types.OverrideType;
 import ca.slashdev.bb.util.Utils;
 
 /**
@@ -43,6 +46,8 @@ public class JadtoolTask extends BaseTask {
    private File input;
    private File destDir;
    private Vector<ResourceCollection> resources = new Vector<ResourceCollection>();
+   private Vector<OverrideType> overrides = new Vector<OverrideType>();
+   private Map<String, String> overrideMap = new HashMap<String, String>();
    
    public void setInput(File input) {
       this.input = input;
@@ -54,6 +59,10 @@ public class JadtoolTask extends BaseTask {
    
    public void add(ResourceCollection res) {
       resources.add(res);
+   }
+   
+   public void add(OverrideType override) {
+      overrides.add(override);
    }
    
    @Override
@@ -75,6 +84,11 @@ public class JadtoolTask extends BaseTask {
       if (!destDir.exists())
          if (!destDir.mkdirs())
             throw new BuildException("unable to create destination directory");
+      
+      for (OverrideType o : overrides) {
+         o.validate();
+         overrideMap.put(o.getKey().toLowerCase(), o.getValue());
+      }
       
       executeRewrite();
    }
@@ -106,6 +120,9 @@ public class JadtoolTask extends BaseTask {
                      || key.startsWith("RIM-COD-Size")) {
                   continue; // ignore line
                }
+               
+               if (overrideMap.containsKey(key.toLowerCase()))
+                  value = overrideMap.get(key.toLowerCase());
                
                output.printf("%s: %s\n", key, value);
             }

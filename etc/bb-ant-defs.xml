@@ -10,4 +10,5 @@
    <typedef name="codset" classname="ca.slashdev.bb.types.CodSetType" />
    
    <taskdef name="jadtool" classname="ca.slashdev.bb.tasks.JadtoolTask" />
+   <typedef name="override" classname="ca.slashdev.bb.types.OverrideType" />
 </antlib>
