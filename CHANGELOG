@@ -1,5 +1,12 @@
 2009-02-10 Josh Kropf <josh@slashdev.ca>
 
+    * OverrideType.java: new type, basic key/value pair model
+    * JadtoolTask.java (overrides): nested parameters of type OverrideType
+      (executeRewrite): override jad fields selected by user
+
+
+2009-02-10 Josh Kropf <josh@slashdev.ca>
+
    * Merged Jeremy Wall's bug fixes and enhancements
    * ApplicationType.java: added version match properties to application tag
      (generate): apply version match to both codSet and application tags
