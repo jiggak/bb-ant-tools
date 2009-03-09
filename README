@@ -580,12 +580,31 @@ If the cod file contains siblings, the cod file is automatically extracted.
 Jadtool task supports selecting cod files using nested resource collections
 such as <fileset> and <filelist>.  At least one cod file must be selected.
 
+  <override>
+  ----------------------------------------------------------------------------
+  Nested element of <jadtool>.  Provides the ability to add and/or update
+  fields in the destination .jad file.
+
+    key
+    ------------------------------------------------------------------------
+    Name of .jad property to add/change
+    
+    value
+    ------------------------------------------------------------------------
+    New value for .jad property
+
  Examples
 ==========
 
 <!-- not much too this task -->
 <jadtool input="ca_slashdev_myapp.jad" destdir="ota">
    <fileset dir="build" includes="*.cod" />
+</jadtool>
+
+<!-- override the name of the application -->
+<jadtool input="ca_slashdev_myapp.jad" destdir="ota">
+   <fileset dir="build" includes="*.cod" />
+   <override key="MIDlet-Name" value="My Application Title"/>
 </jadtool>
 
 

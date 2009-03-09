@@ -613,6 +613,28 @@ Jadtool task supports selecting cod files using nested resource collections
 such as &lt;fileset&gt; and &lt;filelist&gt;.  At least one cod file must be
 selected.
 
+#### &lt;override&gt; ####
+Nested elements of &lt;jadtool&gt;.  Provides the ability to add and/or update
+fields in the destination .jad file.
+
+<table>
+<tr>
+  <th>Attributes</th>
+  <th>Description</th>
+  <th>Required</th>
+</tr>
+<tr>
+  <td>key</td>
+  <td>Name of .jad property to add/change</td>
+  <td>Required</td>
+</tr>
+<tr>
+  <td>value</td>
+  <td>New value for .jad property</td>
+  <td>Required</td>
+</tr>
+</table>
+
 <a name="preproc"></a>
 ## Preprocessor ##
 
@@ -725,3 +747,11 @@ of preprocessor macros.  To use the preprocessor you must:
 	<jadtool input="ca_slashdev_myapp.jad" destdir="ota">
 	   <fileset dir="build" includes="*.cod" />
 	</jadtool>
+
+
+### Example 10 ###
+    <!-- override the name of the application title in Options/Applicaions -->
+    <jadtool input="ca_slashdev_myapp.jad" destdir="ota">
+       <fileset dir="build" includes="*.cod" />
+       <override key="MIDlet-Name" value="My Title" />
+    </jadtool>

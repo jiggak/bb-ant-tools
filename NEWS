@@ -1,3 +1,18 @@
+  March 9, 2009
+============================================
+
+Release 1.2.0
+
+After some back and forth with Neil Sainsbury, it was apparent that some
+mechanism was required for changing properties (key/value fields) writen
+to .jad files created by the <jadtool> task.  One possible use case is to
+change the MIDlet-Name field which controls the product name visible on the
+device in Options->Applications.
+
+A new nested attribute of the <jadtool> task name <override> has been defined.
+See the README file or the website for syntax details.
+
+
   February 10, 2009
 ============================================
 
