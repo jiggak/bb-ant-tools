@@ -1,3 +1,8 @@
+2009-03-11 Josh Kropf <josh@slashdev.ca>
+
+   * ApplicationType.java: Neil Sainsbury's fixes to .alx file generation
+
+
 2009-02-15 Josh Kropf <josh@slashdev.ca>
 
     * OverrideType.java: new type, basic key/value pair model

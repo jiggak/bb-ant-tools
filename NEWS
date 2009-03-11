@@ -1,3 +1,31 @@
+  March 11, 2009
+============================================
+
+Release 1.2.1
+
+This is a bugfix release that deserves some attention.  The <alx> task had
+several flaws in the way it was generating XML.  Basically I had it all wrong.
+
+Neil Sainsbury has sent in a patch that corrects this.  An explanation of the
+issue from his email:
+
+Currently alxtool produces for each codSet output of the form:
+<directory _blackberryVersion="[4.2,4.6)">4.2</directory>
+<fileset Java="1.0">
+    <files>
+        myapp.cod
+    </files>
+</fileset>
+
+The output should actually be of the form:
+<fileset Java="1.0" _blackberryVersion="[4.2,4.6)">
+    <directory>4.2</directory>
+    <files>
+        myapp.cod
+    </files>
+</fileset>
+
+
   March 9, 2009
 ============================================
 

@@ -5,14 +5,17 @@ Written by:
 
 Contributors (alphabetic order by last name):
 ---------------------------------------------
+   Derek Konigsberg <octorian@users.sourceforge.net>
+      - helped add preprocessor support to <rapc> task
+
+   Neil Sainsbury <neil.sainsbury@gmail.com>
+      - fixed several flaws in the .alx file generator
+
    Jeremy Wall <jeremy.wall@gmail.com>
       - use resource bundle for application title
       - version matching for <application> tag in .alx files
       - conditional entry points in <rapc> task
       - several bug fixes related to .alx file generating
-
-   Derek Konigsberg <octorian@users.sourceforge.net>
-      - helped add preprocessor support to <rapc> task
 
    atleta <sourceforge patch>
       - explicitly set preverify tool search path

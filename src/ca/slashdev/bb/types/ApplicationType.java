@@ -225,24 +225,18 @@ public class ApplicationType extends DataType {
             codSetBBVer = codSet.getVersionMatch();
          }
          
-         if (codSet.getDir() != null) {
-            child = xmldoc.createElement("directory");
-            appNode.appendChild(child);
-            child.setTextContent(codSet.getDir());
-            
-            if (codSetBBVer != null) {
-               child.setAttribute("_blackberryVersion", codSetBBVer);
-               codSetBBVer = null;
-            }
-         }
+         Element filesetNode = xmldoc.createElement("fileset");
+         appNode.appendChild(filesetNode);
          
-         child = xmldoc.createElement("fileset");
-         appNode.appendChild(child);
-         
-         child.setAttribute("Java", "1.0");
+         filesetNode.setAttribute("Java", "1.0");
          
          if (codSetBBVer != null) {
-            child.setAttribute("_blackberryVersion", codSetBBVer);
+        	 filesetNode.setAttribute("_blackberryVersion", codSetBBVer);
+         }
+         
+         if (codSet.getDir() != null) {
+        	 filesetNode.appendChild(child = xmldoc.createElement("directory"));
+             child.setTextContent(codSet.getDir());
          }
          
          StringBuffer files = new StringBuffer();
@@ -255,19 +249,20 @@ public class ApplicationType extends DataType {
          Element filesNode = xmldoc.createElement("files");
          filesNode.setTextContent(files.toString());
          
-         child.appendChild(filesNode);
+         filesetNode.appendChild(filesNode);
       }
    }
    
    @SuppressWarnings("unchecked")
    public void copyCodFiles(File destDir) throws IOException {
       Resource r;
+      File codSetDestDir = null;
       
       for (CodSetType codSet : codSets) {
          if (codSet.getDir() != null) {
-            destDir = new File(destDir, codSet.getDir());
-            if (!destDir.exists())
-               if (!destDir.mkdirs())
+        	codSetDestDir = new File(destDir, codSet.getDir());
+            if (!codSetDestDir.exists())
+               if (!codSetDestDir.mkdirs())
                   throw new IOException("unable to create cod files director");
          }
          
@@ -275,7 +270,7 @@ public class ApplicationType extends DataType {
          Iterator<Resource> i = codSet.getResources().iterator();
          while (i.hasNext()) {
             r = i.next();
-            destFile = new FileResource(destDir, Utils.getFilePart(r));
+            destFile = new FileResource(codSetDestDir, Utils.getFilePart(r));
             
             if (!r.equals(destFile))
                ResourceUtils.copyResource(r, destFile);
@@ -283,3 +278,4 @@ public class ApplicationType extends DataType {
       }
    }
 }
+
