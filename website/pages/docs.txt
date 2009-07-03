@@ -295,10 +295,11 @@ attribute names in the table below.
 </table>
 
 #### &lt;entry&gt; ####
-Contains attributes for specifying an alternate entry point for CLDC applications.
-It contains a subset of attributes available in &lt;jdp&gt;.  Optionally, place
-entry point properties in a properties file and set the file attribute.  The
-property names must match the attribute names in the table below.
+Nested element of &lt;jdp&gt;.  Contains attributes for specifying an alternate
+entry point for CLDC applications.  It contains a subset of attributes available
+in &lt;jdp&gt;.  Optionally, place entry point properties in a properties file
+and set the file attribute.  The property names must match the attribute names
+in the table below.
 
 <table>
 <tr>

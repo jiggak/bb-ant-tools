@@ -256,9 +256,10 @@ public class ApplicationType extends DataType {
    @SuppressWarnings("unchecked")
    public void copyCodFiles(File destDir) throws IOException {
       Resource r;
-      File codSetDestDir = null;
       
       for (CodSetType codSet : codSets) {
+         File codSetDestDir = destDir;
+         
          if (codSet.getDir() != null) {
         	codSetDestDir = new File(destDir, codSet.getDir());
             if (!codSetDestDir.exists())

@@ -1,3 +1,16 @@
+2009-07-03 Josh Kropf <josh@slashdev.ca>
+
+   * docs.txt: update documentation for <entry> element to make it clear
+     that this element is a nested element of the <jdp> element.
+
+
+2009-07-02 Josh Kropf <josh@slashdev.ca>
+
+   * ApplicationType.java: Ensure destination directory for cod files is
+     always set to avoid cod files being copied to current working directory
+     by the <alx> task.
+
+
 2009-03-11 Josh Kropf <josh@slashdev.ca>
 
    * ApplicationType.java: Neil Sainsbury's fixes to .alx file generation

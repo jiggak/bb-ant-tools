@@ -34,22 +34,20 @@
    <target name="release" depends="build">
       <mkdir dir="${release.dir}" />
       
-      <copy todir="${release.dir}" >
+      <copy todir="${release.dir}">
          <fileset dir="${basedir}" includes="README" />
          <filterset>
             <filter token="VERSION" value="${build.ver}"/>
          </filterset>
       </copy>
-   	
-   	<copy file="${build.jar.file}" todir="${release.dir}" />
-   	
-      <zip destfile="${binpkg.zip.file}">
+   	  
+      <zip destfile="${release.dir}/${binpkg.zip.file}">
       	<fileset dir="${basedir}" includes="CHANGELOG,COPYING,NEWS,AUTHORS" />
-      	<fileset dir="${release.dir}" file="README"/>
-         <fileset dir="${release.dir}" file="${build.jar.file}"/>
+      	<fileset file="${release.dir}/README"/>
+        <fileset file="${build.jar.file}"/>
       </zip>
-   	
-      <zip destfile="${srcpkg.zip.file}">
+   	  
+      <zip destfile="${release.dir}/${srcpkg.zip.file}">
       	<fileset dir="${basedir}" includes="README,CHANGELOG,COPYING,NEWS,AUTHORS" />
          <fileset dir="${basedir}">
          	<include name="src/**/*"/>
@@ -68,6 +66,6 @@
 
    <target name="distclean" depends="clean">
       <delete file="${srcpkg.zip.file}" />
-   	<delete file="${binpkg.zip.file}" />
+   	  <delete file="${binpkg.zip.file}" />
    </target>
 </project>
