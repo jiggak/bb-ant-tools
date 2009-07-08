@@ -47,7 +47,7 @@ public class JadtoolTask extends BaseTask {
    private File destDir;
    private Vector<ResourceCollection> resources = new Vector<ResourceCollection>();
    private Vector<OverrideType> overrides = new Vector<OverrideType>();
-   private Map<String, String> overrideMap = new HashMap<String, String>();
+   private Map<String, OverrideType> overrideMap = new HashMap<String, OverrideType>();
    
    public void setInput(File input) {
       this.input = input;
@@ -87,7 +87,7 @@ public class JadtoolTask extends BaseTask {
       
       for (OverrideType o : overrides) {
          o.validate();
-         overrideMap.put(o.getKey().toLowerCase(), o.getValue());
+         overrideMap.put(o.getKey().toLowerCase(), o);
       }
       
       executeRewrite();
@@ -105,6 +105,8 @@ public class JadtoolTask extends BaseTask {
             
             int i, num = 0;
             String line, key, value;
+            OverrideType override;
+            
             while ((line = reader.readLine()) != null) {
                num ++;
                
@@ -121,8 +123,12 @@ public class JadtoolTask extends BaseTask {
                   continue; // ignore line
                }
                
-               if (overrideMap.containsKey(key.toLowerCase()))
-                  value = overrideMap.get(key.toLowerCase());
+               // check for .jad element override, remove from map if found
+               override = overrideMap.get(key.toLowerCase());
+               if (override != null) {
+                  value = override.getValue();
+                  overrideMap.remove(key.toLowerCase());
+               }
                
                output.printf("%s: %s\n", key, value);
             }
@@ -178,6 +184,11 @@ public class JadtoolTask extends BaseTask {
             }
          } catch (IOException e) {
             throw new BuildException("error copying cod file", e);
+         }
+         
+         // flush remaining overrides into target .jad
+         for (OverrideType override : overrideMap.values()) {
+             output.printf("%s: %s\n", override.getKey(), override.getValue());
          }
       } finally {
          FileUtils.close(reader);
