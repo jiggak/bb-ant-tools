@@ -1,5 +1,11 @@
 2009-09-11 Josh Kropf <josh@slashdev.ca>
 
+	* JadtoolTask.java (executeRewrite): trim spaces from the value part of
+	  key/value pairs in origional .jad file.
+
+
+2009-09-11 Josh Kropf <josh@slashdev.ca>
+
    * JadtoolTask.java: applied patch from Marek Uhel to fix incorrect numbering
      of RIM-COD-URL-* attributes in generated .jad file.
 

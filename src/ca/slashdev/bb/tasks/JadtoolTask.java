@@ -115,7 +115,7 @@ public class JadtoolTask extends BaseTask {
                   throw new BuildException("unexpected line in jad file: "+num);
                
                key = line.substring(0, i);
-               value = line.substring(i+1);
+               value = line.substring(i+1).trim();
                
                if (key.startsWith("RIM-COD-URL")
                      || key.startsWith("RIM-COD-SHA1")
