@@ -11,6 +11,9 @@ Contributors (alphabetic order by last name):
    Neil Sainsbury <neil.sainsbury@gmail.com>
       - fixed several flaws in the .alx file generator
 
+   Marek Uhel <muhel@users.sourceforge.net>
+      - fixed bug in <jadtool> task
+
    Jeremy Wall <jeremy.wall@gmail.com>
       - use resource bundle for application title
       - version matching for <application> tag in .alx files

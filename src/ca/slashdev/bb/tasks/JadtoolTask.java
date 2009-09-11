@@ -177,9 +177,9 @@ public class JadtoolTask extends BaseTask {
                         output.printf("RIM-COD-SHA1-%d: %s\n", num, Utils.getSHA1(destFile));
                         output.printf("RIM-COD-Size-%d: %d\n", num, destFile.length());
                      }
+                     num ++;
                   }
                   
-                  num ++;
                }
             }
          } catch (IOException e) {
