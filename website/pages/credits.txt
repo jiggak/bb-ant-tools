@@ -2,6 +2,7 @@
 
 * Derek Konigsberg: help/patch, preprocessor supoprt
 * Neil Sansbury: fixed several flaws in the .alx file generator
+* Phil Smith: added nopreverify switch to rapc task and updated documentation
 * Jeremy Wall:
   * patch, use resource bundle for application title
   * bug fixes in .alx file generating

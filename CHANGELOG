@@ -1,3 +1,9 @@
+2009-09-15 Josh Kropf <josh@slashdev.ca>
+
+	* RapcTask.java (nopreverify): applied patch from Phil Smith that passes
+	  flag to rapc compiler instructing it to skip preverify step.
+
+
 2009-09-11 Josh Kropf <josh@slashdev.ca>
 
 	* JadtoolTask.java (executeRewrite): trim spaces from the value part of

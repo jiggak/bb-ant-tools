@@ -119,6 +119,10 @@ the existing cod file.
   noconvert
   ----------------------------------------------------------------------------
   Do not convert all images to PNG.  Optional, defaults to false.
+
+  nopreverify
+  ----------------------------------------------------------------------------
+  Do not call the preverify executable.  Optional, defaults to false.
   
   generatesourcelist
   ----------------------------------------------------------------------------

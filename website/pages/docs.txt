@@ -142,6 +142,11 @@ file.
   <td>Optional</td>
 </tr>
 <tr>
+  <td>nopreverify</td>
+  <td>Do not call the preverify executable, default is false.</td>
+  <td>Optional</td>
+</tr>
+<tr>
   <td>generatesourcelist</td>
   <td>Generate list of source files in text file.  Set this to true when java
     returns "CreateProcess error=87" on Windows.  Optional, defaults to false.</td>

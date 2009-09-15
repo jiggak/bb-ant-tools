@@ -53,6 +53,7 @@ public class RapcTask extends BaseTask
    private boolean nowarn;
    private boolean warnerror;
    private boolean noconvert;
+   private boolean nopreverify;
    
    private boolean generateSourceList = false;
    private String sourceListFile = "sources.txt";
@@ -214,6 +215,14 @@ public class RapcTask extends BaseTask
     */
    public void setNoconvert(boolean noconvert) {
       this.noconvert = noconvert;
+   }
+   
+   /**
+    * Don't call the preverifier, default is false.
+    * @param nopreverify
+    */
+   public void setNopreverify(boolean nopreverify) {
+      this.nopreverify = nopreverify;
    }
    
    /**
@@ -451,6 +460,7 @@ public class RapcTask extends BaseTask
       if (nowarn) java.createArg().setValue("-noWarn");
       if (warnerror) java.createArg().setValue("-wx");
       if (noconvert) java.createArg().setValue("-noconvertpng");
+      if (nopreverify) java.createArg().setValue("-nopreverified");
       
       if (exePath != null)
          java.createArg().setValue("-exepath="+exePath.getAbsolutePath());
