@@ -185,4 +185,23 @@ public final class Utils {
       
       return target.lastModified() >= src.lastModified();
    }
+   
+   /**
+    * Join an array of strings using comma as separator.
+    * @param parts
+    * @return comma separated string
+    */
+   public static String join(String[] parts) {
+      if (parts != null) {
+         StringBuilder sb = new StringBuilder();
+         for (int i=0; i<parts.length; i++) {
+            sb.append(parts[i]);
+            if (i != parts.length - 1)
+               sb.append(',');
+         }
+         return sb.toString();
+      }
+      
+      return null;
+   }
 }

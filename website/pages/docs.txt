@@ -294,7 +294,15 @@ attribute names in the table below.
 </tr>
 <tr>
   <td>icon</td>
-  <td>Ribbon icon.  Path must be relative to destdir, eg: ../img/ribbon1.png</td>
+  <td>Ribbon icon.  Path must be relative to destdir, eg: ../img/ribbon1.png
+    Use a comma delimited list to set multiple icons.</td>
+  <td></td>
+</tr>
+<tr>
+  <td>focusicon</td>
+  <td>Ribbon focus icon (>= JDE 4.7).  Path must be relative to destdir,
+    eg: ../img/focus1.png.  Use a comma delimited list to set multiple focus
+    icons.</td>
   <td></td>
 </tr>
 </table>
@@ -364,7 +372,15 @@ in the table below.
 </tr>
 <tr>
   <td>icon</td>
-  <td>Ribbon icon.  Path must be relative to destdir, eg: ../img/ribbon1.png</td>
+  <td>Ribbon icon.  Path must be relative to destdir, eg: ../img/ribbon1.png
+    Use a comma delimited list to set multiple icons.</td>
+  <td></td>
+</tr>
+<tr>
+  <td>focusicon</td>
+  <td>Ribbon focus icon (>= JDE 4.7).  Path must be relative to destdir,
+    eg: ../img/focus1.png.  Use a comma delimited list to set multiple focus
+    icons.</td>
   <td></td>
 </tr>
 <tr>

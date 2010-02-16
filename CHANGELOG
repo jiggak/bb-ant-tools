@@ -1,3 +1,13 @@
+2010-02-16 Josh Kropf <josh@slashdev.ca>
+
+	* BaseJdpType.java: new base class for JdpType and EntryPointType that
+	  contains common properties shared by the two.
+	* EntryPointType.java: now derived from BaseJdpType
+	* JdpType: now derived from BaseJdpType
+	  (writeManifest): output extra icons and focus icons to manifest file
+	* Utils.java (join): new method, join array of strings with commas.
+
+
 2009-09-15 Josh Kropf <josh@slashdev.ca>
 
 	* RapcTask.java (nopreverify): applied patch from Phil Smith that passes

@@ -236,7 +236,14 @@ the existing cod file.
     
     icon
     ------------------------------------------------------------------------
-    Ribbon icon.  Path must be relative to destdir, eg: ../img/ribbon1.png
+    Ribbon icon.  Path must be relative to destdir, eg: ../img/ribbon1.png.
+    Use a comma delimited list to set multiple icons.
+    
+    focusicon
+    ------------------------------------------------------------------------
+    Ribbon focus icon (>= JDE 4.7).  Path must be relative to destdir,
+    eg: ../img/focus1.png.  Use a comma delimited list to set multiple focus
+    icons.
     
     file
     ------------------------------------------------------------------------
@@ -287,8 +294,14 @@ the existing cod file.
     
       icon
       --------------------------------------------------------------------
-      Ribbon icon.  Path must be relative to destdir,
-      eg: ../img/ribbon1.png
+      Ribbon icon.  Path must be relative to destdir, eg: ../img/ribbon1.png.
+      Use a comma delimited list to set multiple icons.
+      
+      focusicon
+      --------------------------------------------------------------------
+      Ribbon focus icon (>= JDE 4.7).  Path must be relative to destdir,
+      eg: ../img/focus1.png.  Use a comma delimited list to set multiple focus
+      icons.
       
       file
       --------------------------------------------------------------------
@@ -356,6 +369,12 @@ See reference documentation for <rapc> task above.
 <rapc output="ca_slashdev_MyKickAssApp" srcdir="${src.dir}" defines="TAG1;TAG2">
    <define tag="TAG3"/>
    <define tag="TAG4"/>
+</rapc>
+
+
+<!-- set rollover icon in home screen (>= JDE 4.7) -->
+<rapc output="ca_slashdev_MyKickAssApp" srcdir="${src.dir}">
+   <jdp icon="icon.png" focusicon="focus.png" />
 </rapc>
 
 

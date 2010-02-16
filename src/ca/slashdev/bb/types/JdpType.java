@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.types.DataType;
 
 /**
  * Collection of project settings.  Project settings can be set using the
@@ -37,36 +36,18 @@ import org.apache.tools.ant.types.DataType;
  * of this data type exactly.
  * @author josh
  */
-public class JdpType extends DataType {
+public class JdpType extends BaseJdpType {
    private TypeAttribute type;
-   private String title;
-   private String version;
-   private String vendor;
+   private String version = "0.0";
+   private String vendor = "<unknown>";
    private String description;
-   private String arguments;
-   private String midletClass;
-   private boolean systemModule;
-   private boolean runOnStartup;
-   private int startupTier;
-   private int ribbonPosition;
-   private String icon;
-   private String nameResourceBundle;
-   private int nameResourceId;
+   private String midletClass = "";
    
    private List<EntryPointType> entryPoints = new ArrayList<EntryPointType>();
    
    public JdpType() {
       type = new TypeAttribute();
       type.setValue(TypeAttribute.CLDC);
-      title = "";
-      vendor = "<unknown>";
-      version = "0.0";
-      icon = "";
-      arguments = "";
-      midletClass = "";
-      startupTier = 7;
-      ribbonPosition = 0;
-      nameResourceId = -1;
    }
    
    public TypeAttribute getType() {
@@ -75,14 +56,6 @@ public class JdpType extends DataType {
    
    public void setType(TypeAttribute type) {
       this.type = type;
-   }
-   
-   public String getArguments() {
-      return arguments;
-   }
-   
-   public void setArguments(String arguments) {
-      this.arguments = arguments;
    }
    
    public String getMidletClass() {
@@ -109,26 +82,6 @@ public class JdpType extends DataType {
       this.description = desc;
    }
    
-   public int getRibbonPosition() {
-      return ribbonPosition;
-   }
-   
-   public void setRibbonPosition(int ribbonPosition) {
-      this.ribbonPosition = ribbonPosition;
-   }
-   
-   public boolean isRunOnStartup() {
-      return runOnStartup;
-   }
-   
-   public void setRunOnStartup(boolean runOnStartup) {
-      this.runOnStartup = runOnStartup;
-   }
-   
-   public int getStartupTier() {
-      return startupTier;
-   }
-   
    public void setStartupTier(int startupTier) {
       if (startupTier >= 0 && startupTier <= 7) {
          this.startupTier = startupTier;
@@ -145,14 +98,6 @@ public class JdpType extends DataType {
       this.systemModule = systemModule;
    }
    
-   public String getTitle() {
-      return title;
-   }
-   
-   public void setTitle(String title) {
-      this.title = title;
-   }
-   
    public String getVendor() {
       return vendor;
    }
@@ -161,30 +106,6 @@ public class JdpType extends DataType {
       this.vendor = vendor;
    }
    
-   public String getIcon() {
-      return icon;
-   }
-   
-   public void setIcon(String icon) {
-      this.icon = icon;
-   }
-
-   public String getNameResourceBundle() {
-      return nameResourceBundle;
-   }
-
-   public void setNameResourceBundle(String nameResourceBundle) {
-      this.nameResourceBundle = nameResourceBundle;
-   }
-
-   public int getNameResourceId() {
-      return nameResourceId;
-   }
-
-   public void setNameResourceId(int nameResourceId) {
-      this.nameResourceId= nameResourceId;
-   }
-
    public void addEntry(EntryPointType entry) {
       entryPoints.add(entry);
    }
@@ -195,6 +116,8 @@ public class JdpType extends DataType {
     * @throws BuildException
     */
    public void setFile(File file) throws BuildException {
+      super.setFile(file);
+      
       FileInputStream in = null;
       
       if (!file.isFile()) {
@@ -208,19 +131,10 @@ public class JdpType extends DataType {
          props.load(in);
          
          type.setValue(props.getProperty("type", TypeAttribute.CLDC));
-         title = props.getProperty("title", "");
          version = props.getProperty("version", "0.0");
          vendor = props.getProperty("vendor", "<unknown>");
          description = props.getProperty("description");
-         arguments = props.getProperty("arguments", "");
          midletClass = props.getProperty("midletclass", "");
-         systemModule = Boolean.parseBoolean(props.getProperty("systemmodule", "false"));
-         runOnStartup = Boolean.parseBoolean(props.getProperty("runonstartup", "false"));
-         setStartupTier(Integer.parseInt(props.getProperty("startupTier", "7")));
-         setRibbonPosition(ribbonPosition = Integer.parseInt(props.getProperty("ribbonposition", "0")));
-         icon = props.getProperty("icon", "");
-         nameResourceBundle = props.getProperty("nameresourcebundle");
-         nameResourceId = Integer.parseInt(props.getProperty("nameresourceid", "-1"));
       } catch (IOException e) {
          throw new BuildException("error loading properties", e);
       } finally {
@@ -260,7 +174,7 @@ public class JdpType extends DataType {
          out.println("MicroEdition-Configuration: CLDC-1.1");
          
          if (TypeAttribute.CLDC.equals(type.getValue())) {
-            out.printf("MIDlet-1: %s,%s,%s\n", title, icon, arguments);
+            out.printf("MIDlet-1: %s,%s,%s\n", title, getFirstIcon(), arguments);
             
             if (ribbonPosition > 0) {
                out.printf("RIM-MIDlet-Position-1: %d\n", ribbonPosition);
@@ -271,25 +185,55 @@ public class JdpType extends DataType {
                out.printf("RIM-MIDlet-NameResourceId-1: %d\n", nameResourceId);
             }
             
+            int iconIndex = 0;
+            for (int i=1; i<icons.length; i++) {
+               iconIndex ++;
+               out.printf("RIM-MIDlet-Icon-1-%d: %s\n", iconIndex, icons[i]);
+            }
+            
+            for (String icon : focusIcons) {
+               iconIndex ++;
+               out.printf("RIM-MIDlet-Icon-1-%d: %s,focused\n", iconIndex, icon);
+            }
+            
+            if (iconIndex > 0) {
+               out.printf("RIM-MIDlet-Icon-Count-1: %d\n", iconIndex);
+            }
+            
             int flags = 0x00;
             if (runOnStartup) flags |= 0xE1-((2*startupTier)<<4);
             if (systemModule) flags |= 0x02;
             out.printf("RIM-MIDlet-Flags-1: %d\n", flags);
             
             if (entryPoints.size() != 0) {
-               int i = 2;
+               int entryIndex = 2;
                for (EntryPointType entryPoint : entryPoints) {
-                  if(entryPoint.valid(getProject())) {
-                     out.printf("MIDlet-%d: %s,%s,%s\n", i, entryPoint.getTitle(),
-                           entryPoint.getIcon(), entryPoint.getArguments());
+                  if(entryPoint.enabled(getProject())) {
+                     out.printf("MIDlet-%d: %s,%s,%s\n", entryIndex, entryPoint.getTitle(),
+                           entryPoint.getFirstIcon(), entryPoint.getArguments());
                   
                      if (entryPoint.getRibbonPosition() > 0) {
-                        out.printf("RIM-MIDlet-Position-%d: %d\n", i, entryPoint.getRibbonPosition());
+                        out.printf("RIM-MIDlet-Position-%d: %d\n", entryIndex, entryPoint.getRibbonPosition());
                      }
    
                      if (entryPoint.getNameResourceBundle() != null && entryPoint.getNameResourceId() > -1) {
-                        out.printf("RIM-MIDlet-NameResourceBundle-%d: %s\n", i, entryPoint.getNameResourceBundle());
-                        out.printf("RIM-MIDlet-NameResourceId-%d: %d\n", i, entryPoint.getNameResourceId());
+                        out.printf("RIM-MIDlet-NameResourceBundle-%d: %s\n", entryIndex, entryPoint.getNameResourceBundle());
+                        out.printf("RIM-MIDlet-NameResourceId-%d: %d\n", entryIndex, entryPoint.getNameResourceId());
+                     }
+                     
+                     iconIndex = 0;
+                     for (int i=1; i<entryPoint.icons.length; i++) {
+                        iconIndex ++;
+                        out.printf("RIM-MIDlet-Icon-%d-%d: %s\n", entryIndex, iconIndex, entryPoint.icons[i]);
+                     }
+                     
+                     for (String icon : entryPoint.focusIcons) {
+                        iconIndex ++;
+                        out.printf("RIM-MIDlet-Icon-%d-%d: %s,focused\n", entryIndex, iconIndex, icon);
+                     }
+                     
+                     if (iconIndex > 0) {
+                        out.printf("RIM-MIDlet-Icon-Count-%d: %d\n", entryIndex, iconIndex);
                      }
    
                      flags = 0x00;
@@ -301,14 +245,14 @@ public class JdpType extends DataType {
                         flags |= 0x02;
                      }
                      
-                     out.printf("RIM-MIDlet-Flags-%d: %d\n", i, flags);
+                     out.printf("RIM-MIDlet-Flags-%d: %d\n", entryIndex, flags);
                      
-                     i ++;
+                     entryIndex ++;
                   }
                }
             }
          } else if (TypeAttribute.MIDLET.equals(type.getValue())) {
-            out.printf("MIDlet-1: %s,%s,%s\n", title, icon, midletClass);
+            out.printf("MIDlet-1: %s,%s,%s\n", title, getFirstIcon(), midletClass);
             
             if (ribbonPosition > 0) {
                out.printf("RIM-MIDlet-Position-1: %d\n", ribbonPosition);

@@ -1,3 +1,35 @@
+  February 16, 2010
+============================================
+
+Release 1.2.5
+
+There have been several requests to add support for focus icons to bb-ant-tools.
+This is a feature that was added in JDE 4.7.  Previous version of the JDE/rapc
+compiler DO NOT support setting focus icons at compile time, instead, they must
+be set dynamically at runtime.
+
+The new syntax looks like this:
+<rapc ...>
+   <jdp icon="icon.png" focusIcon="focus.png" />
+</rapc>
+
+Note 1: the path to the image file is relative to the directory that the rapc
+compile is executed under.  If you compile in a sub-directory of your project
+be sure to adjust the path appropriately, example:
+
+<rapc destdir="build">
+   <jdp icon="../img/icon.png" />
+</rapc>
+
+Note 2: for some crazy reason, RIM's JDE supports setting multiple icons for
+a given entry point (I have yet to figure out what purpose this has).  To set
+multiple icons with bb-ant-tools, the syntax is as follows:
+
+<rapc ...>
+   <jdp icon="icon1.png,icon2.png" focusIcon="focus1.png,focus2.png" />
+</rapc>
+
+
   March 11, 2009
 ============================================
 
