@@ -5,6 +5,9 @@ Written by:
 
 Contributors (alphabetic order by last name):
 ---------------------------------------------
+   David Hunter <hunterd42@gmail.com>
+      - fixed bug: invalid manifest when properties file is missing focusIcon
+
    Derek Konigsberg <octorian@users.sourceforge.net>
       - helped add preprocessor support to <rapc> task
 

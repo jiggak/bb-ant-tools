@@ -1,3 +1,10 @@
+2010-02-22 Josh Kropf <josh@slashdev.ca>
+
+	* BaseJdpType.java (setIcon): check non-null AND non-empty string
+	  (setFocusIcon): check non-null AND non-empty string
+	  (setFile): use null as default for icon when properties file missing attribute
+
+
 2010-02-16 Josh Kropf <josh@slashdev.ca>
 
 	* BaseJdpType.java: new base class for JdpType and EntryPointType that

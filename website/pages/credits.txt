@@ -1,5 +1,6 @@
 ## Credit and Thanks ##
 
+* David Hunter: patch, fixed bug: invalid manifest when properties file is missing focusIcon
 * Derek Konigsberg: help/patch, preprocessor supoprt
 * Neil Sansbury: fixed several flaws in the .alx file generator
 * Phil Smith: added nopreverify switch to rapc task and updated documentation

@@ -111,7 +111,7 @@ public class BaseJdpType extends DataType {
    }
    
    public void setIcon(String icon) {
-      this.icons = icon != null? icon.split(",") : new String[0];
+      this.icons = icon != null && icon.length() > 0? icon.split(",") : new String[0];
    }
    
    public String getFocusIcon() {
@@ -119,7 +119,7 @@ public class BaseJdpType extends DataType {
    }
    
    public void setFocusIcon(String focusIcon) {
-      this.focusIcons = focusIcon != null? focusIcon.split(",") : new String[0];
+      this.focusIcons = focusIcon != null && focusIcon.length() > 0? focusIcon.split(",") : new String[0];
    }
    
    protected String getFirstIcon() {
@@ -153,8 +153,8 @@ public class BaseJdpType extends DataType {
          ribbonPosition = Integer.parseInt(props.getProperty("ribbonposition", "0"));
          nameResourceBundle = props.getProperty("nameresourcebundle");
          nameResourceId = Integer.parseInt(props.getProperty("nameresourceid", "-1"));
-         setIcon(props.getProperty("icon", ""));
-         setFocusIcon(props.getProperty("focusIcon", ""));
+         setIcon(props.getProperty("icon", null));
+         setFocusIcon(props.getProperty("focusIcon", null));
       } catch (IOException e) {
          throw new BuildException("error loading properties", e);
       } finally {
