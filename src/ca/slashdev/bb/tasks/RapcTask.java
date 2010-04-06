@@ -141,7 +141,7 @@ public class RapcTask extends BaseTask
     * @param jdkHome jdk home directory
     */
    public void setJdkHome(File jdkHome) {
-      File bin = new File(jdeHome, "bin");
+      File bin = new File(jdkHome, "bin");
       if (!bin.isDirectory()) {
          throw new BuildException("jdk home missing \"bin\" directory");
       }
