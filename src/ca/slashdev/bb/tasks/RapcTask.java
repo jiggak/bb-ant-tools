@@ -21,6 +21,8 @@ package ca.slashdev.bb.tasks;
 
 import java.io.File;
 import java.io.PrintStream;
+import java.lang.management.ManagementFactory;
+import java.util.List;
 import java.util.Vector;
 
 import org.apache.tools.ant.BuildException;
@@ -404,6 +406,7 @@ public class RapcTask extends BaseTask
       }
       
       Java java = (Java)getProject().createTask("java");
+      
       java.setTaskName(getTaskName());
       java.setClassname("net.rim.tools.compiler.Compiler");
       
@@ -413,7 +416,11 @@ public class RapcTask extends BaseTask
       // we want to fail if rapc returns non-zero
       java.setFailonerror(true);
       
-      Environment.Variable var = null;
+      // loop through JVM arguments and add them to the task
+      List<String> jvmArgs = ManagementFactory.getRuntimeMXBean().getInputArguments();
+      for (String arg : jvmArgs) {
+         java.createJvmarg().setValue(arg);
+      }
       
       // loop through the systems environment variables looking for PATH
       Vector<String> env = Execute.getProcEnvironment();
@@ -423,7 +430,7 @@ public class RapcTask extends BaseTask
          if (line.toUpperCase().startsWith("PATH")) {
             
             // create new env variable using jde bin directory as the value
-            var = new Environment.Variable();
+            Environment.Variable var = new Environment.Variable();
             var.setKey("PATH");
             var.setFile(new File(jdeHome, "bin"));
             
@@ -433,12 +440,11 @@ public class RapcTask extends BaseTask
                   File.pathSeparatorChar,
                   var.getValue()));
             
+            java.addEnv(var);
+            
             break;
          }
       }
-      
-      if (var != null)
-         java.addEnv(var);
       
       // if jdk home was specified, set the jvm command
       if (jdkHome != null) {

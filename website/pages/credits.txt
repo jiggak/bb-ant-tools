@@ -1,5 +1,8 @@
 ## Credit and Thanks ##
 
+* Daniel Baird: trouble shooting, feedback, and testing: OutOfMemoryError:
+  Java heap space when compiling large projects (rapc needs to be run with Ant's
+  JVM arg: -Xmx512M or higher)
 * David Hunter: patch, fixed bug: invalid manifest when properties file is missing focusIcon
 * Derek Konigsberg: help/patch, preprocessor supoprt
 * Neil Sansbury: fixed several flaws in the .alx file generator
