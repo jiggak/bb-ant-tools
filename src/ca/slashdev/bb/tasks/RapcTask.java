@@ -416,10 +416,13 @@ public class RapcTask extends BaseTask
       // we want to fail if rapc returns non-zero
       java.setFailonerror(true);
       
-      // loop through JVM arguments and add them to the task
+      // loop through parent JVM arguments and add -X args to the java task
+      // compiling large projects sometimes results in OutOfMemory exceptions
+      // so the -Xmx vm argument needs to be propagated through to the rapc VM
       List<String> jvmArgs = ManagementFactory.getRuntimeMXBean().getInputArguments();
       for (String arg : jvmArgs) {
-         java.createJvmarg().setValue(arg);
+         if (arg.startsWith("-X"))
+            java.createJvmarg().setValue(arg);
       }
       
       // loop through the systems environment variables looking for PATH
@@ -463,7 +466,7 @@ public class RapcTask extends BaseTask
       else if (quiet) java.createArg().setValue("-quiet");
       
       if (nodebug) java.createArg().setValue("-nodebug");
-      if (nowarn) java.createArg().setValue("-noWarn");
+      if (nowarn) java.createArg().setValue("-nowarn");
       if (warnerror) java.createArg().setValue("-wx");
       if (noconvert) java.createArg().setValue("-noconvertpng");
       if (nopreverify) java.createArg().setValue("-nopreverified");
@@ -500,8 +503,7 @@ public class RapcTask extends BaseTask
             }
          }
 
-         java.createArg().setValue("-define=PREPROCESSOR" +
-               File.pathSeparatorChar + defs);
+         java.createArg().setValue("-define=PREPROCESSOR" + defs);
       }
       
       java.createArg().setValue("import="+imports.toString());

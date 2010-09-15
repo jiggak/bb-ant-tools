@@ -1,3 +1,13 @@
+2010-09-15 Josh Kropf <josh@slashdev.ca>
+
+	* RapcTask.java (executeRapc): only copy JVM arguments that start with -X
+	  when launching rapc; in rare instances Ant can be launched with args
+	  that do NOT have properly escaped spaces and cause confusion when copying
+	  these arguments.
+	  (executeRapc): use all lower case for -noWarn switch
+	  (executeRapc): removed extra separator in PREPROCESSOR line
+
+
 2010-04-13 Josh Kropf <josh@slashdev.ca>
 
 	* RapcTask.java (executeRapc): copy Ant's JVM arguments when launching rapc
