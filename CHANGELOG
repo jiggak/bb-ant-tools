@@ -1,3 +1,10 @@
+2010-12-07 Josh Kropf <josh@slashdev.ca>
+
+    * JadtoolTask.java: new property (output); override output name of .jad file
+    * SigtoolTask.java: new property (sigtooljar); set path to signature tool
+      .jar file
+
+
 2010-09-15 Josh Kropf <josh@slashdev.ca>
 
 	* RapcTask.java (executeRapc): only copy JVM arguments that start with -X

@@ -65,6 +65,14 @@ public class SigtoolTask extends BaseTask
    }
    
    /**
+    * Set path to SignatureTool.jar file.
+    * @param sigtoolJar
+    */
+   public void setSigtoolJar(File sigtoolJar) {
+	   this.sigtoolJar = sigtoolJar;
+   }
+   
+   /**
     * Closes signature tool regardless of its success, defaults to false.
     * @param forceClose
     */
@@ -90,7 +98,7 @@ public class SigtoolTask extends BaseTask
    
    /**
     * Sets password for automatic signature requesting.
-    * Setting the passowrd implicitly sets request and close
+    * Setting the password implicitly sets request and close
     * properties to true.
     * @param password
     */
@@ -118,8 +126,12 @@ public class SigtoolTask extends BaseTask
    public void execute() throws BuildException {
       super.execute();
       
-      if (jdeHome == null) {
-         throw new BuildException("jdehome not set");
+      if (jdeHome == null && sigtoolJar == null) {
+         throw new BuildException("jdehome OR sigtooljar must be set");
+      }
+      
+      if (!sigtoolJar.exists() || !sigtoolJar.isFile()) {
+    	  throw new BuildException("sigtooljar doesn't exist or is not a regular file");
       }
       
       if (codFiles.size() == 0 && codFile == null) {

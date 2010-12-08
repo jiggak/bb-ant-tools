@@ -44,17 +44,34 @@ import ca.slashdev.bb.util.Utils;
  */
 public class JadtoolTask extends BaseTask {
    private File input;
+   private String output;
    private File destDir;
    private Vector<ResourceCollection> resources = new Vector<ResourceCollection>();
    private Vector<OverrideType> overrides = new Vector<OverrideType>();
    private Map<String, OverrideType> overrideMap = new HashMap<String, OverrideType>();
    
+   /**
+    * Input .jad file.
+    * @param input
+    */
    public void setInput(File input) {
       this.input = input;
    }
    
+   /**
+    * Destination directory for cod files and new jad file.
+    * @param destDir
+    */
    public void setDestDir(File destDir) {
       this.destDir = destDir;
+   }
+   
+   /**
+    * Set output .jad file name. Use name of input file by default.
+    * @param output
+    */
+   public void setOutput(String output) {
+      this.output = output;
    }
    
    public void add(ResourceCollection res) {
@@ -74,6 +91,9 @@ public class JadtoolTask extends BaseTask {
       
       if (!input.exists())
          throw new BuildException("input file is missing");
+      
+      if (output == null)
+    	  output = input.getName();
       
       if (resources.size() == 0)
          throw new BuildException("specify at least one cod file");
@@ -101,7 +121,7 @@ public class JadtoolTask extends BaseTask {
       try {
          try {
             reader = new BufferedReader(new FileReader(input));
-            output = new PrintStream(new File(destDir, input.getName()));
+            output = new PrintStream(new File(destDir, this.output));
             
             int i, num = 0;
             String line, key, value;

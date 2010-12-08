@@ -410,8 +410,15 @@ the cod file to mark it as signed.
 </tr>
 <tr>
   <td>jdehome</td>
-  <td>Sets the JDE home directory.  This attribute is required when the jde.home
-    property is not defined at the project level.</td>
+  <td>Set the JDE home directory.  This attribute is required when the jde.home
+    property is not defined at the project level **and** the `sigtooljar`
+    attribute has not been set.</td>
+  <td>Optional</td>
+</tr>
+<tr>
+  <td>sigtooljar</td>
+  <td>Set the path to the signature tool jar file.  When this attribute is
+    set the `jdehome` attribute is optional.</td>
   <td>Optional</td>
 </tr>
 <tr>
@@ -624,6 +631,11 @@ If the cod file contains siblings, the cod file is automatically extracted.
   <td>Required</td>
 </tr>
 <tr>
+  <td>output</td>
+  <td>Set output .jad file name. Use name of input file by default.</td>
+  <td>Optional</td>
+</tr>
+<tr>
   <td>destdir</td>
   <td>Destination directory for cod files and new jad file.</td>
   <td>Required</td>
@@ -660,7 +672,7 @@ fields in the destination .jad file.
 <a name="preproc"></a>
 ## Preprocessor ##
 
-Apparently since version 4.0, rapc compiler has had support for a simple set
+Apparently since JDE v4.0, rapc compiler has had support for a simple set
 of preprocessor macros.  To use the preprocessor you must:
 
  * enable processing on a per file basis by placing `//#preprocess` in the very

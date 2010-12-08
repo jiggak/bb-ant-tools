@@ -390,8 +390,14 @@ along side the cod file to mark it as signed.
 
   jdehome
   ----------------------------------------------------------------------------
-  Sets the JDE home directory.  This attribute is required when the "jde.home"
-  property is not defined at the project level.
+  Set the JDE home directory.  This attribute is required when the "jde.home"
+  property is not defined at the project level *and* the "sigtooljar"
+  attribute has not been set.
+  
+  sigtooljar
+  ----------------------------------------------------------------------------
+  Set the path to the signature tool jar file.  When this attribute is
+  set the "jdehome" attribute is optional.
   
   codfile
   ----------------------------------------------------------------------------
