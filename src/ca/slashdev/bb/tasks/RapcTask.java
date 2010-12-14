@@ -449,11 +449,34 @@ public class RapcTask extends BaseTask
          }
       }
       
-      // if jdk home was specified, set the jvm command
+      // Markus Winter posted a description of the reason for this on the
+      // mailing list. Basically the rapc compiler will use tools.jar on
+      // the classpath and compile .java files inside the VM. If tools.jar
+      // is not on the classpath, it will use external javac command which
+      // could result in "CreateProcess error=87, The parameter is incorrect"
+      // malarkey on winblows.
+      File toolsJar = null;
+      
       if (jdkHome != null) {
+         // jdk home was specified, set the jvm command
          java.setJvm(String.format("%s%c%s",
                new File(jdkHome, "bin").getAbsolutePath(),
                File.separatorChar, "java"));
+         
+         // assume when explicitly setting jdk home, it's in fact jdk not jre
+         toolsJar = new File(jdkHome, "lib/tools.jar");
+      } else {
+          // we need the tools.jar file from the jdk
+          // in a jdk the java.home points to the jre folder inside the jdk
+          // normally so we check if the parent is called jre
+          File javaHome = new File(System.getProperty("java.home"));
+          if (javaHome.getName().equals("jre")) {
+              toolsJar = new File(javaHome.getParentFile(), "lib/tools.jar");
+          }
+      }
+      
+      if (toolsJar != null && toolsJar.isFile()) {
+          java.createClasspath().setLocation(toolsJar);
       }
       
       // directory from which command will be launched

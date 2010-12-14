@@ -26,6 +26,10 @@ Contributors (alphabetic order by last name):
       - conditional entry points in <rapc> task
       - several bug fixes related to .alx file generating
 
+   Markus Winter <m.winter@sap.com>
+      - patch: tools.jar solution for "CreateProcess error=87 - javac parameter
+        too long" errors on windows
+
    atleta <sourceforge patch>
       - explicitly set preverify tool search path
 

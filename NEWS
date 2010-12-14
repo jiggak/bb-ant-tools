@@ -1,3 +1,19 @@
+  December 14, 2010
+============================================
+
+Release 1.2.12
+
+Several weeks back a helpful chap dropped by the mailing list and shared his
+patch to fix a "CreateProcess error=87" error when compiling projects with
+many files on windows. It appears the "rapc.exe" executable does some tweaking
+to the java classpath before it actually runs the rapc.jar compiler. In this
+case the solution was to add the tools.jar file into the classpath so that
+the rapc.jar compiler did not try and run the external javac compiler (which
+would ultimately cause the "CreateProcess" error).
+
+Sorry to all for taking so long to get this into a release.
+
+
   February 16, 2010
 ============================================
 
