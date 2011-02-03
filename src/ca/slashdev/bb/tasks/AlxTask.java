@@ -20,6 +20,7 @@
 package ca.slashdev.bb.tasks;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -109,12 +110,13 @@ public class AlxTask extends BaseTask {
          TransformerFactory tf = TransformerFactory.newInstance();
          Transformer serializer = tf.newTransformer();
          serializer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+         serializer.setOutputProperty(OutputKeys.METHOD, "xml");
          serializer.setOutputProperty(OutputKeys.INDENT, "yes");
          
          // this is needed to make indenting work, works with XALAN only
          serializer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "3");
          
-         StreamResult streamResult = new StreamResult(destFile);
+         StreamResult streamResult = new StreamResult(new FileWriter(destFile));
          serializer.transform(domSource, streamResult);
       } catch (Exception e) {
          throw new BuildException(e);

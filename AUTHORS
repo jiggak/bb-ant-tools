@@ -10,6 +10,7 @@ Contributors (alphabetic order by last name):
 
    Derek Konigsberg <octorian@users.sourceforge.net>
       - helped add preprocessor support to <rapc> task
+      - patch: <alx> task enhancements
 
    Neil Sainsbury <neil.sainsbury@gmail.com>
       - fixed several flaws in the .alx file generator

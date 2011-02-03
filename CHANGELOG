@@ -1,3 +1,10 @@
+2011-01-18 Josh Kropf <josh@slashdev.ca>
+
+    * ApplicationType.java (generate), CodSetType.java:
+      applied patch from Derek Konigsberg which cleans up the output formatting
+      of the ALX generator as well as adds a few new properties
+
+
 2010-12-14 Josh Kropf <josh@slashdev.ca>
 
     * RapcTask.java (executeRapc): applied patch from Markus Winter that adds
