@@ -39,6 +39,7 @@ public class CodSetType extends DataType {
    private String langId;
    private KeyboardTypeAttribute keyboardType;
    private String series;
+   private String model;
 
    public void add(ResourceCollection res) {
       resources.add(res);
@@ -124,6 +125,14 @@ public class CodSetType extends DataType {
 
    public String getSeries() {
       return series;
+   }
+
+   public String getModel() {
+      return model;
+   }
+
+   public void setModel(String model) {
+      this.model = model;
    }
 
    public Union getResources() {

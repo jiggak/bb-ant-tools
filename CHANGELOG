@@ -1,3 +1,9 @@
+2011-02-03 Josh Kropf <josh@slashdev.ca>
+
+    * ApplicationType.java (generate), CodSetType.java (model):
+      applied patch from user LouE on sf.net that adds 'model' attribute to ALX
+
+
 2011-01-18 Josh Kropf <josh@slashdev.ca>
 
     * ApplicationType.java (generate), CodSetType.java:

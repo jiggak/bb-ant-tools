@@ -250,6 +250,10 @@ public class ApplicationType extends DataType {
             filesetNode.setAttribute("series", codSet.getSeries());
          }
 
+         if (codSet.getModel() != null) {
+            filesetNode.setAttribute("model", codSet.getModel());
+         }
+
          if (codSet.getDir() != null) {
              filesetNode.appendChild(child = xmldoc.createElement("directory"));
              child.setTextContent(codSet.getDir());
