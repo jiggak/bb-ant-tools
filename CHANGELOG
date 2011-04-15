@@ -1,5 +1,18 @@
 2011-04-15 Josh Kropf <josh@slashdev.ca>
 
+    * RapcTask.java (setDescriptor):
+      new attribute for parsing BlackBerry_App_Descriptor.xml files
+    * BaseJdpType.java (midletClass):
+      moved midletClass property from JdpType into base class
+    * JdpType.java (writeManifest):
+      rafactored in an attempt to make method more readable
+	* TypeAttribute.java (fromAppDescriptor):
+	  new static method for parsing type in app descriptor files
+	* NodeIterable.java: new class for iterating DOM node lists
+
+
+2011-04-15 Josh Kropf <josh@slashdev.ca>
+
     * RapcTask.java (encoding,executeRapc):
       added attribute for setting file encoding name (-Dfile.encoding=)
 

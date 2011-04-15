@@ -1,18 +1,18 @@
 /*
  * Copyright 2008 Josh Kropf
- * 
+ *
  * This file is part of bb-ant-tools.
- * 
+ *
  * bb-ant-tools is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * bb-ant-tools is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with bb-ant-tools; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -36,6 +36,8 @@ import java.util.zip.ZipInputStream;
 import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.ResourceCollection;
 import org.apache.tools.ant.util.FileUtils;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  * Set of utility methods for working with Resource objects and File objects.
@@ -43,7 +45,7 @@ import org.apache.tools.ant.util.FileUtils;
  */
 public final class Utils {
    private static final byte[] ZIP_MAGIC = new byte[] {0x50, 0x4b, 0x03, 0x04};
-   
+
    /**
     * Returns the file name portion of the resource.
     * @param r resource object
@@ -55,7 +57,7 @@ public final class Utils {
          path = path.substring(path.lastIndexOf('/')+1);
       return path;
    }
-   
+
    /**
     * Returns true if the resource is a zip file.
     * @param r resource object
@@ -66,17 +68,17 @@ public final class Utils {
       InputStream in = null;
       try {
          in = r.getInputStream();
-         
+
          byte[] magic = new byte[4];
          if (in.read(magic) != 4)
             throw new IOException("unable to read 4 bytes from resource");
-         
+
          return Arrays.equals(magic, ZIP_MAGIC);
       } finally {
          FileUtils.close(in);
       }
    }
-   
+
    /**
     * Extracts zip file resource to the destination directory and returns an
     * array of the zip file entry names.
@@ -87,11 +89,11 @@ public final class Utils {
     */
    public static String[] extract(Resource r, File destDir) throws IOException {
       FileOutputStream output = null;
-      
+
       Vector<String> entries = new Vector<String>();
       byte[] buf = new byte[1024];
       int sz;
-      
+
       ZipInputStream input = null;
       try {
          input = new ZipInputStream(r.getInputStream());
@@ -100,7 +102,7 @@ public final class Utils {
             try {
                entries.add(entry.getName());
                output = new FileOutputStream(new File(destDir, entry.getName()));
-               
+
                while ((sz=input.read(buf)) != -1) {
                   output.write(buf, 0, sz);
                }
@@ -108,16 +110,16 @@ public final class Utils {
                input.closeEntry();
                FileUtils.close(output);
             }
-            
+
             entry = input.getNextEntry();
          }
       } finally {
          FileUtils.close(input);
       }
-      
+
       return entries.toArray(new String[] {});
    }
-   
+
    /**
     * Calculates the SHA hash of the given file and returns the result as
     * a string of hex digits separated by spaces.
@@ -130,25 +132,25 @@ public final class Utils {
       try {
          in = new FileInputStream(file);
          ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-         
+
          int sz;
          byte[] buf = new byte[1024];
-         
+
          while ((sz=in.read(buf)) != -1) {
             buffer.write(buf, 0, sz);
          }
-         
+
          MessageDigest md = MessageDigest.getInstance("SHA");
          md.update(buffer.toByteArray());
-         
+
          byte[] hash = md.digest();
-         
+
          StringBuffer str = new StringBuffer();
          for (byte b : hash) {
             str.append(' ');
             str.append(String.format("%02x", (b & 0xff)));
          }
-         
+
          return str.toString();
       } catch (NoSuchAlgorithmException e) {
          throw new RuntimeException("weird, everyone has this algo", e);
@@ -156,23 +158,23 @@ public final class Utils {
          FileUtils.close(in);
       }
    }
-   
+
    @SuppressWarnings("unchecked")
    public static boolean isUpToDate(ResourceCollection src, File target) {
       if (!target.exists())
          return false;
-      
+
       long targetLastModified = target.lastModified();
-      
+
       Iterator<Resource> i = src.iterator();
       while (i.hasNext()) {
          if (i.next().getLastModified() > targetLastModified)
             return false;
       }
-      
+
       return true;
    }
-   
+
    /**
     * Returns true if target is newer than (or same age as) source.
     * @param src source file (the one used to create target)
@@ -182,10 +184,10 @@ public final class Utils {
    public static boolean isUpToDate(File src, File target) {
       if (!target.exists())
          return false;
-      
+
       return target.lastModified() >= src.lastModified();
    }
-   
+
    /**
     * Join an array of strings using comma as separator.
     * @param parts
@@ -201,7 +203,70 @@ public final class Utils {
          }
          return sb.toString();
       }
-      
+
+      return null;
+   }
+
+   /**
+    * Return string value of the named attribute inside the named node map.
+    * @param map collection of attributes
+    * @param name name of attribute to return
+    * @return attribute value or null if it does not exist or is empty
+    */
+   public static String getAttrString(NamedNodeMap map, String name) {
+      String val = null;
+
+      Node node = map.getNamedItem(name);
+      if (node != null) {
+         val = node.getNodeValue();
+      }
+
+      if (val != null && val.length() == 0) {
+         val = null;
+      }
+
+      return val;
+   }
+
+   /**
+    * Return int value of the named attributed inside the named node map and
+    * return a default value if it is not found or can't be parsed as int.
+    * @param map collection of attributes
+    * @param name name of attribute to return
+    * @param def value to return if attribute not found or in parse fails
+    * @return attribute value or default value if not found or invalid
+    */
+   public static int getAttrInt(NamedNodeMap map, String name, int def) {
+      try {
+         return Integer.parseInt(getAttrString(map, name));
+      } catch (NumberFormatException e) {
+         return def;
+      }
+   }
+
+   /**
+    * Return bool value of the named attributed inside the named node map.
+    * @param map collection of attributes
+    * @param name name of attribute to return
+    * @return attribute value or false if not found or invalid
+    */
+   public static boolean getAttrBool(NamedNodeMap map, String name) {
+      return Boolean.parseBoolean(getAttrString(map, name));
+   }
+
+   /**
+    * Returns the first child node of the parent with the matching node name.
+    * @param parent parent node
+    * @param nodeName node name to look for
+    * @return first child node matching name, or null if not found
+    */
+   public static Node getChildNamed(Node parent, String nodeName) {
+      for (Node child : NodeIterable.fromChildren(parent)) {
+         if (nodeName.equals(child.getNodeName())) {
+            return child;
+         }
+      }
+
       return null;
    }
 }

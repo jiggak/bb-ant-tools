@@ -1,18 +1,18 @@
 /*
  * Copyright 2007 Josh Kropf
- * 
+ *
  * This file is part of bb-ant-tools.
- * 
+ *
  * bb-ant-tools is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * bb-ant-tools is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with bb-ant-tools; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -20,6 +20,9 @@
 package ca.slashdev.bb.types;
 
 import org.apache.tools.ant.Project;
+import org.w3c.dom.Node;
+
+import ca.slashdev.bb.util.Utils;
 
 /**
  * This data type contains attributes for specifying an alternate entry point
@@ -32,7 +35,14 @@ import org.apache.tools.ant.Project;
 public class EntryPointType extends BaseJdpType {
    private String ifCond;
    private String unlessCond;
-   
+
+   public EntryPointType() { }
+
+   public EntryPointType(Node appDescriptor) {
+      parseCommonXml(appDescriptor.getAttributes());
+      parseIconsXml(Utils.getChildNamed(appDescriptor, "Icons"));
+   }
+
    /**
     * Sets the if attribute.  The entry point is included during compilation
     * when the property named by this attribute is defined in the project.
@@ -50,7 +60,7 @@ public class EntryPointType extends BaseJdpType {
    public void setUnless(String unlessCond) {
       this.unlessCond = unlessCond;
    }
-   
+
    public boolean enabled(Project p) {
       if (ifCond != null && p.getProperty(ifCond) == null) {
          return false;
