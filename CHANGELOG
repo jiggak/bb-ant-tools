@@ -1,5 +1,11 @@
 2011-04-15 Josh Kropf <josh@slashdev.ca>
 
+    * JadtoolTask.java (addOverride):
+      changed add(OverrideType) to addOverride(OverrideType)
+
+
+2011-04-15 Josh Kropf <josh@slashdev.ca>
+
     * RapcTask.java (encoding,executeRapc):
       added attribute for setting file encoding name (-Dfile.encoding=)
 
