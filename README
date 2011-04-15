@@ -124,6 +124,10 @@ the existing cod file.
   ----------------------------------------------------------------------------
   Do not call the preverify executable.  Optional, defaults to false.
   
+  encoding
+  ----------------------------------------------------------------------------
+  Set file encoding name for source files.  Optional, uses system default.
+
   generatesourcelist
   ----------------------------------------------------------------------------
   Generate list of source files in text file.  Set this to true when java

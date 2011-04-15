@@ -1,3 +1,9 @@
+2011-04-15 Josh Kropf <josh@slashdev.ca>
+
+    * RapcTask.java (encoding,executeRapc):
+      added attribute for setting file encoding name (-Dfile.encoding=)
+
+
 2011-02-03 Josh Kropf <josh@slashdev.ca>
 
     * ApplicationType.java (generate), CodSetType.java (model):

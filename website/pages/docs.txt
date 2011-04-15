@@ -147,6 +147,11 @@ file.
   <td>Optional</td>
 </tr>
 <tr>
+  <td>encoding</td>
+  <td>Set file encoding name for source files.</td>
+  <td>Optional</td>
+</tr>
+<tr>
   <td>generatesourcelist</td>
   <td>Generate list of source files in text file.  Set this to true when java
     returns "CreateProcess error=87" on Windows.  Optional, defaults to false.</td>
