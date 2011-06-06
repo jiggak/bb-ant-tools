@@ -12,6 +12,10 @@ Contributors (alphabetic order by last name):
       - helped add preprocessor support to <rapc> task
       - patch: <alx> task enhancements
 
+   Mathieu Rene <mrene@users.sourceforge.net>
+      - patch: search for 'PATH=' when overriding system PATH to avoid
+        incorrectly modifying other variables such as PATHEXT
+
    Neil Sainsbury <neil.sainsbury@gmail.com>
       - fixed several flaws in the .alx file generator
 

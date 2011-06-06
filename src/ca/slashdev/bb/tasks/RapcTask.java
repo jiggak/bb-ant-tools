@@ -439,7 +439,7 @@ public class RapcTask extends BaseTask
       for (String line : env) {
 
          // setup our own path variable
-         if (line.toUpperCase().startsWith("PATH")) {
+         if (line.toUpperCase().startsWith("PATH=")) {
 
             // create new env variable using jde bin directory as the value
             Environment.Variable var = new Environment.Variable();
