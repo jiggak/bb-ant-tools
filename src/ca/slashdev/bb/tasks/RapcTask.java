@@ -380,31 +380,44 @@ public class RapcTask extends BaseTask
             }
          }
 
-         Node compiler = Utils.getChildNamed(root, "Compile");
-         NamedNodeMap attributes = compiler.getAttributes();
+         Node compile = Utils.getChildNamed(root, "Compile");
+         NamedNodeMap combileAttribs = compile.getAttributes();
 
-         quiet = ! Utils.getAttrBool(attributes, "OutputCompilerMessages");
-         noconvert = ! Utils.getAttrBool(attributes, "ConvertImages");
+         quiet = ! Utils.getAttrBool(combileAttribs, "OutputCompilerMessages");
+         noconvert = ! Utils.getAttrBool(combileAttribs, "ConvertImages");
 
          //TODO figure out what these do
-         Utils.getAttrBool(attributes, "CreateWarningForNoExportedRoutine");
-         Utils.getAttrBool(attributes, "CompressResources");
-         Utils.getAttrString(attributes, "AliasList");
+         Utils.getAttrBool(combileAttribs, "CreateWarningForNoExportedRoutine");
+         Utils.getAttrBool(combileAttribs, "CompressResources");
+         Utils.getAttrString(combileAttribs, "AliasList");
 
-         Node defines = Utils.getChildNamed(compiler, "PreprocessorDefines");
+         Node defines = Utils.getChildNamed(compile, "PreprocessorDefines");
          if (defines != null) {
             for (Node def : NodeIterable.fromChildren(defines)) {
-               attributes = def.getAttributes();
+               combileAttribs = def.getAttributes();
 
                // skip the tag if "IsActive" is false
-               if (!Utils.getAttrBool(attributes, "IsActive")) {
+               if (!Utils.getAttrBool(combileAttribs, "IsActive")) {
                   continue;
                }
 
-               String tag = Utils.getAttrString(attributes, "PreprocessorDefine");
+               String tag = Utils.getAttrString(combileAttribs, "PreprocessorDefine");
                this.defines.add(new Define(tag));
             }
          }
+
+         // TODO what's the nested AlxFiles element do?
+         Node pkging = Utils.getChildNamed(root, "Packaging");
+         NamedNodeMap pkgingAttribs = pkging.getAttributes();
+
+         output = Utils.getAttrString(pkgingAttribs, "OutputFileName");
+
+         //TODO figure out what these do
+         Utils.getAttrString(pkgingAttribs, "OutputFolder");
+         Utils.getAttrString(pkgingAttribs, "PreBuildStep");
+         Utils.getAttrString(pkgingAttribs, "PostBuildStep");
+         Utils.getAttrString(pkgingAttribs, "CleanStep");
+         Utils.getAttrBool(pkgingAttribs, "GenerateALXFile");
       } catch (ParserConfigurationException e) {
          throw new BuildException(e);
       } catch (SAXException e) {

@@ -1,8 +1,14 @@
 2011-06-06 Josh Kropf <josh@slashdev.ca>
 
+    * RapcTask.java (setDescriptor): applied patch from anon sf.net user
+      extract .cod file base name from app descriptor Packaging node
+
+
+2011-06-06 Josh Kropf <josh@slashdev.ca>
+
 	* NodeIterable.java: filter out all non-element type nodes to fix error
 	  when iterating over alternate entry points extracted from app descriptor
-	* RapcTask.java <setDescriptor>: applied patch from Anders Jacobsson to fix
+	* RapcTask.java (setDescriptor): applied patch from Anders Jacobsson to fix
 	  typo in fetching compiler settings from app descriptor
 
 
