@@ -19,8 +19,8 @@
  */
 package ca.slashdev.bb.util;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -34,35 +34,18 @@ public class NodeIterable implements Iterable<Node> {
       return new NodeIterable(node.getChildNodes());
    }
 
-   private NodeList _list;
-   private final int _length;
+   private ArrayList<Node> _list = new ArrayList<Node>();
 
    public NodeIterable(NodeList list) {
-      _list = list;
-      _length = _list.getLength();
+      for (int i=0, len=list.getLength(); i<len; i++) {
+         if (list.item(i).getNodeType() == Node.ELEMENT_NODE) {
+            _list.add(list.item(i));
+         }
+      }
    }
 
    @Override
    public Iterator<Node> iterator() {
-      return new Iterator<Node>() {
-         private int _cursor;
-
-         @Override
-         public boolean hasNext() {
-            return _cursor < _length;
-         }
-
-         @Override
-         public Node next() {
-            if (!hasNext()) {
-               throw new NoSuchElementException();
-            }
-
-            return _list.item(_cursor++);
-         }
-
-         @Override
-         public void remove() { }
-      };
+      return _list.iterator();
    }
 }

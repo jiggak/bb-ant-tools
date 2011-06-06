@@ -380,7 +380,7 @@ public class RapcTask extends BaseTask
             }
          }
 
-         Node compiler = Utils.getChildNamed(root, "Compiler");
+         Node compiler = Utils.getChildNamed(root, "Compile");
          NamedNodeMap attributes = compiler.getAttributes();
 
          quiet = ! Utils.getAttrBool(attributes, "OutputCompilerMessages");

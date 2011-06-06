@@ -8,6 +8,10 @@ Contributors (alphabetic order by last name):
    David Hunter <hunterd42@gmail.com>
       - fixed bug: invalid manifest when properties file is missing focusIcon
 
+   Anders Jacobsson <bloomper@users.sourceforge.net>
+      - patch: fixed typo in initial app descriptor support and error caused
+               by iterating over unfiltered XML node lists
+
    Derek Konigsberg <octorian@users.sourceforge.net>
       - helped add preprocessor support to <rapc> task
       - patch: <alx> task enhancements
